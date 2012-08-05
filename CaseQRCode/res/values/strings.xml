@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">CaseQRCode</string>
+    <string name="search_hint">Search for cases</string>
+    <string name="about">About</string>
+    <string name="import_cases">Import</string>
+    <string name="export_cases">Export</string>
+    <string name="search">Search</string>
+    <string name="scan">Scan</string>
+    <string name="delete_db">Delete Database</string>
+
+</resources>

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android" >
+    <item android:id="@+id/about" android:title="@string/about" android:icon="@drawable/ic_menu_help"></item>
+    <item android:id="@+id/import_cases" android:title="@string/import_cases" android:icon="@drawable/ic_menu_archive"></item>
+    <item android:id="@+id/export_cases" android:title="@string/export_cases" android:icon="@drawable/ic_menu_save"></item>
+    <!-- item android:id="@+id/search" android:title="@string/search" android:icon="@drawable/ic_menu_search"></item-->
+    <item android:id="@+id/delete_db" android:icon="@drawable/ic_menu_delete" android:title="@string/delete_db"></item>
+    
+
+</menu>
