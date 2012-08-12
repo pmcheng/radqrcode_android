@@ -9,5 +9,6 @@
     <string name="search">Search</string>
     <string name="scan">Scan</string>
     <string name="delete_db">Delete Database</string>
+    <string name="new_case">New Case</string>
 
 </resources>

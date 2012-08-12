@@ -138,6 +138,10 @@ public class CaseQRCodeActivity extends Activity implements OnItemClickListener 
 			//about.setTitle("About");
 			about.show();
 			break;
+		case R.id.new_case:
+			Intent i = new Intent(this, EditActivity.class);
+			startActivity(i);
+			break;
 		case R.id.import_cases:
 			new ImportTask(this).execute();
 			break;
