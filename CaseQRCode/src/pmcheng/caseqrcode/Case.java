@@ -36,13 +36,12 @@ public class Case {
 	}
 
 	public Case(String[] input) {
-		loc = input[1];
-		MRN = input[2];
-		study = input[3];
-		date = convertDate(input[4]);
-		desc = input[5];
-		follow_up = (input[6].equals("1")) ? 1 : 0;
-
+		MRN = input[0];
+		desc = input[1];
+		date = convertDate(input[2]);
+		loc = input[3];
+		follow_up = (input[4].equals("1")) ? 1 : 0;
+		study = input[5];
 	}
 
 	public String convertDate(String dateString) {
