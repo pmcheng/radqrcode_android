@@ -54,8 +54,8 @@ public class CaseQRCodeActivity extends Activity implements OnItemClickListener 
 				startActivityForResult(intent, 0);
 			}
 		});
-		
-		Button buttonSearch=(Button) findViewById(R.id.buttonSearch);
+
+		Button buttonSearch = (Button) findViewById(R.id.buttonSearch);
 		buttonSearch.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
 				onSearchRequested();
@@ -126,16 +126,16 @@ public class CaseQRCodeActivity extends Activity implements OnItemClickListener 
 	}
 
 	public boolean onCreateOptionsMenu(Menu menu) {
-	    MenuInflater inflater = getMenuInflater();
-	    inflater.inflate(R.menu.main_menu, menu);
-	    return true;			
+		MenuInflater inflater = getMenuInflater();
+		inflater.inflate(R.menu.main_menu, menu);
+		return true;
 	}
 
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
 		case R.id.about:
 			AboutDialog about = new AboutDialog(this);
-			//about.setTitle("About");
+			// about.setTitle("About");
 			about.show();
 			break;
 		case R.id.new_case:
@@ -184,7 +184,7 @@ public class CaseQRCodeActivity extends Activity implements OnItemClickListener 
 						"samsung")) {
 			url = url + "external_sd" + File.separator;
 		}
-		
+
 		return url;
 	}
 
@@ -204,30 +204,41 @@ public class CaseQRCodeActivity extends Activity implements OnItemClickListener 
 				dialog.dismiss();
 			}
 			setupList();
-			if (success) Toast.makeText(CaseQRCodeActivity.this, "Imported "+count+" entries.", Toast.LENGTH_SHORT).show();
+			if (success)
+				Toast.makeText(CaseQRCodeActivity.this,
+						"Imported " + count + " entries.", Toast.LENGTH_SHORT)
+						.show();
 
 		}
 
 		@Override
 		protected void onProgressUpdate(Integer... values) {
 			super.onProgressUpdate(values);
-			this.dialog.setMessage("Loading "+values[0]+" cases");
+			this.dialog.setMessage("Loading " + values[0] + " cases");
 		}
 
 		protected Boolean doInBackground(final String... args) {
 			CSVReader reader;
-			count=0;
+			count = 0;
 			try {
 				reader = new CSVReader(new FileReader(getStorageDir()
 						+ "cases.csv"));
 				reader.readNext();
 				String[] nextLine;
 				CaseQRCodeApp caseApp = (CaseQRCodeApp) getApplication();
+				
 				while ((nextLine = reader.readNext()) != null) {
-					Case radcase = new Case(nextLine);
+					if (nextLine.length<Case.LENGTH) continue;
+					String[] subset=new String[Case.LENGTH];
+					final int OFFSET=1;
+					for (int i = 0; i < subset.length; i++) {
+						subset[i]=nextLine[i+OFFSET];
+					}
+					Case radcase = new Case(subset);
 					caseApp.getCaseData().insert(radcase);
 					count++;
 					publishProgress(count);
+
 				}
 
 				return true;
@@ -240,6 +251,7 @@ public class CaseQRCodeActivity extends Activity implements OnItemClickListener 
 
 	public class ExportTask extends AsyncTask<String, Void, Boolean> {
 		private ProgressDialog dialog;
+		public int count;
 
 		public ExportTask(Activity activity) {
 			dialog = new ProgressDialog(CaseQRCodeActivity.this);
@@ -252,7 +264,10 @@ public class CaseQRCodeActivity extends Activity implements OnItemClickListener 
 			if (dialog.isShowing()) {
 				dialog.dismiss();
 			}
-			if (success) Toast.makeText(CaseQRCodeActivity.this, "Exported successfully.", Toast.LENGTH_SHORT).show();
+			if (success)
+				Toast.makeText(CaseQRCodeActivity.this,
+						"Exported " + count + " entries.", Toast.LENGTH_SHORT)
+						.show();
 		}
 
 		protected Boolean doInBackground(final String... args) {
@@ -262,11 +277,13 @@ public class CaseQRCodeActivity extends Activity implements OnItemClickListener 
 				writer = new CSVWriter(new FileWriter(getStorageDir()
 						+ "cases_export.csv"));
 				cursor.moveToFirst();
-				String[] header={"id","loc","MRN","study","date","desc","follow_up"};
+				String[] header = { "id", "loc", "MRN", "study", "date",
+						"desc", "follow_up" };
 				writer.writeNext(header);
 				while (cursor.isAfterLast() == false) {
 					String[] entries = caseApp.getCaseData().getCase(cursor);
 					writer.writeNext(entries);
+					count++;
 					cursor.moveToNext();
 				}
 				writer.close();

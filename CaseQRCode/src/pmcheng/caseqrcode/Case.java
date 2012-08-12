@@ -28,20 +28,20 @@ public class Case {
 		} else {
 			loc = elements[0];
 			MRN = elements[1];
-			date = convertDate(elements[2]);
-			study = elements[3];
-			follow_up = (elements[4].equals("1")) ? 1 : 0;
-			desc = elements[5];
+			study = elements[2];
+			date = convertDate(elements[3]);
+			desc = elements[4];
+			follow_up = (elements[5].equals("1")) ? 1 : 0;
 		}
 	}
 
 	public Case(String[] input) {
-		MRN = input[0];
-		desc = input[1];
-		date = convertDate(input[2]);
-		loc = input[3];
-		follow_up = (input[4].equals("1")) ? 1 : 0;
-		study = input[5];
+		loc = input[0];
+		MRN = input[1];
+		study = input[2];
+		date = convertDate(input[3]);
+		desc = input[4];	
+		follow_up = (input[5].equals("1")) ? 1 : 0;
 	}
 
 	public String convertDate(String dateString) {

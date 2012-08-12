@@ -77,13 +77,13 @@ public class EditActivity extends Activity {
 		btnUpdate.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View v) {
 				String[] case_array = new String[6];
-				case_array[0] = e_mrn.getText().toString();
-				case_array[1] = e_desc.getText().toString();
-				case_array[2] = e_date.getText().toString();
-				case_array[3] = e_loc.getText().toString();
-				case_array[4] = cb_fu.isChecked() ? "1" : "0";
-				case_array[5] = e_study.getText().toString();
-
+				case_array[0] = e_loc.getText().toString();
+				case_array[1] = e_mrn.getText().toString();
+				case_array[2] = e_study.getText().toString();
+				case_array[3] = e_date.getText().toString();
+				case_array[4] = e_desc.getText().toString();
+				case_array[5] = cb_fu.isChecked() ? "1" : "0";
+						
 				Case radcase = new Case(case_array);
 
 				if (newCase) {
