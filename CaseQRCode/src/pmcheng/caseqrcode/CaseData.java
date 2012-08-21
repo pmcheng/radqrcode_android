@@ -1,5 +1,7 @@
 package pmcheng.caseqrcode;
 
+import java.util.ArrayList;
+
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
@@ -82,7 +84,21 @@ public class CaseData {
 		SQLiteDatabase db = this.dbHelper.getReadableDatabase();
 		return db.query(TABLE, null, null, null, null, null, C_DATE+" DESC");
 	}
+	
+	public ArrayList<String> getLocs() {
+		ArrayList<String> locList=new ArrayList<String>();
+		SQLiteDatabase db = this.dbHelper.getReadableDatabase();
+		String query=String.format("SELECT DISTINCT %s FROM %s ORDER BY %s",C_LOC, TABLE, C_LOC); 
+		Cursor cursor=db.rawQuery(query,null);
 
+		cursor.moveToFirst();
+		while (cursor.isAfterLast() == false) {
+			locList.add(cursor.getString(0));
+			cursor.moveToNext();
+		}
+		return locList;
+	}
+	
 	public Cursor getCases(String query) {
 		Log.d(TAG,"Query: "+query);
 		SQLiteDatabase db = this.dbHelper.getReadableDatabase();
@@ -125,9 +141,10 @@ public class CaseData {
 			String sql = String
 					.format("CREATE TABLE %s "
 							+ "( %s INTEGER PRIMARY KEY AUTOINCREMENT, "
-							+ "%s TEXT, %s TEXT, %s TEXT, %s TEXT, %s TEXT, %s INTEGER)",
-							TABLE, C_ID, C_LOC, C_MRN, C_STUDY, C_DATE, C_DESC,
-							C_FOLLOW_UP);
+							+ "%s TEXT, %s TEXT, %s TEXT, %s TEXT, %s TEXT, %s INTEGER, "
+							+ "UNIQUE (%s, %s, %s) ON CONFLICT REPLACE)",
+							TABLE, C_ID, C_LOC, C_MRN, C_STUDY, C_DATE, C_DESC, C_FOLLOW_UP,
+							C_LOC,C_MRN,C_DATE);
 			Log.d(TAG, "onCreate with SQL: " + sql);
 			db.execSQL(sql);
 		}

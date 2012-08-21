@@ -2,6 +2,7 @@ package pmcheng.caseqrcode;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 
 import android.app.Activity;
@@ -13,9 +14,13 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.Spinner;
+
 
 public class EditActivity extends Activity {
 	private static final String TAG = "EditActivity";
@@ -24,6 +29,7 @@ public class EditActivity extends Activity {
 	CheckBox cb_fu;
 	CaseQRCodeApp caseApp;
 	boolean newCase = false;
+	boolean spinnerInitialized = false;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -83,7 +89,7 @@ public class EditActivity extends Activity {
 				case_array[3] = e_date.getText().toString();
 				case_array[4] = e_desc.getText().toString();
 				case_array[5] = cb_fu.isChecked() ? "1" : "0";
-						
+
 				Case radcase = new Case(case_array);
 
 				if (newCase) {
@@ -95,6 +101,40 @@ public class EditActivity extends Activity {
 				finish();
 			}
 		});
+
+		ArrayList<String> locList = caseApp.getCaseData().getLocs();
+		locList.add(0, "---");
+
+		Spinner locSpinner = (Spinner) findViewById(R.id.spinnerLoc);
+		if (locList.size()>1) {
+			try {
+				ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
+						android.R.layout.simple_spinner_item,locList);
+				adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+				locSpinner.setAdapter(adapter);
+
+				locSpinner
+						.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+							public void onItemSelected(AdapterView<?> parent,
+									View v, int pos, long id) {
+								if (!spinnerInitialized) {
+									spinnerInitialized = true;
+								} else if (pos>0){
+									e_loc.setText(parent.getItemAtPosition(pos).toString());
+								}
+							}
+
+							public void onNothingSelected(AdapterView<?> parent) {
+								return;
+							}
+						});
+
+			} catch (Exception e) {
+				Log.v(TAG, e.getStackTrace().toString());
+			}
+		} else {
+			locSpinner.setVisibility(View.GONE);
+		}
 
 		Button btnDelete = (Button) findViewById(R.id.btnDelete);
 		if (newCase) {

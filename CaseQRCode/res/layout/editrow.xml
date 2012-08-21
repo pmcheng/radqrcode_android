@@ -1,14 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
-    android:layout_height="fill_parent" 
-    android:orientation="vertical">
+    android:layout_height="fill_parent"
+    android:orientation="vertical" >
 
     <ScrollView
         android:layout_width="fill_parent"
-        android:layout_height="0dip" 
-		android:layout_weight="1">
-                <LinearLayout
+        android:layout_height="0dip"
+        android:layout_weight="1" >
+
+        <LinearLayout
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
             android:orientation="vertical" >
@@ -26,7 +27,7 @@
                 android:ems="10"
                 android:gravity="top|left"
                 android:inputType="textMultiLine" />
-            
+
             <TextView
                 android:id="@+id/textViewMRN"
                 android:layout_width="wrap_content"
@@ -45,11 +46,25 @@
                 android:layout_height="wrap_content"
                 android:text="Location" />
 
-            <EditText
-                android:id="@+id/editLoc"
+            <LinearLayout
                 android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:ems="10" />
+                android:layout_height="wrap_content" >
+			    >
+
+                <EditText
+                    android:id="@+id/editLoc"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:ems="10" />
+
+                <Spinner
+                    android:id="@+id/spinnerLoc"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1" />
+
+            </LinearLayout>
 
             <TextView
                 android:id="@+id/textViewDate"
@@ -62,7 +77,7 @@
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:ems="10" />
-            
+
             <TextView
                 android:id="@+id/textViewStudy"
                 android:layout_width="wrap_content"
@@ -80,14 +95,12 @@
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:text="Follow-up" />
-      
         </LinearLayout>
     </ScrollView>
 
-
     <LinearLayout
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content" >
 
         <Button
             android:id="@+id/btnUpdate"
@@ -95,12 +108,14 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="Update" />
-		<Button
+
+        <Button
             android:id="@+id/btnDelete"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="Delete" />
+
         <Button
             android:id="@+id/btnCancel"
             android:layout_width="wrap_content"
