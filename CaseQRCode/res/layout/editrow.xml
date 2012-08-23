@@ -36,6 +36,7 @@
 
             <EditText
                 android:id="@+id/editMRN"
+                android:inputType="number"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:ems="10" />
@@ -49,7 +50,7 @@
             <LinearLayout
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content" >
-			    >
+			    >
 
                 <EditText
                     android:id="@+id/editLoc"
@@ -57,13 +58,12 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:ems="10" />
-
+
                 <Spinner
                     android:id="@+id/spinnerLoc"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1" />
-
             </LinearLayout>
 
             <TextView
@@ -72,11 +72,11 @@
                 android:layout_height="wrap_content"
                 android:text="Date" />
 
-            <EditText
-                android:id="@+id/editDate"
+            <Button
+                android:id="@+id/btnDate"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:ems="10" />
+                android:text="" />
 
             <TextView
                 android:id="@+id/textViewStudy"
