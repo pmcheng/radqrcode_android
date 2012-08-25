@@ -120,7 +120,7 @@ public final class Intents {
      * Send this intent to encode a piece of data as a QR code and display it full screen, so
      * that another person can scan the barcode from your screen.
      */
-    public static final String ACTION = "com.google.zxing.client.android.ENCODE";
+    public static final String ACTION = "pmcheng.caseqrcode.ENCODE";
 
     /**
      * The data to encode. Use Intent.putExtra(DATA, data) where data is either a String or a

@@ -15,6 +15,9 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.AdapterView;
@@ -250,4 +253,33 @@ public class EditActivity extends Activity {
 		}
 	};
 
+	public boolean onCreateOptionsMenu(Menu menu) {
+		MenuInflater inflater = getMenuInflater();
+		inflater.inflate(R.menu.edit_menu, menu);
+		return true;
+	}
+	public boolean onOptionsItemSelected(MenuItem item) {
+		switch (item.getItemId()) {
+		case R.id.create_qr:
+			String[] case_array = new String[6];
+			case_array[0] = e_loc.getText().toString();
+			case_array[1] = e_mrn.getText().toString();
+			case_array[2] = e_study.getText().toString();
+			case_array[3] = b_date.getText().toString();
+			case_array[4] = e_desc.getText().toString();
+			case_array[5] = cb_fu.isChecked() ? "1" : "0";
+			String output_string=case_array[0];
+			for (int i=1;i<case_array.length;i++) {
+				output_string=output_string+"|"+case_array[i];
+			}
+			Intent intent = new Intent("pmcheng.caseqrcode.ENCODE");
+			intent.putExtra("ENCODE_TYPE", "TEXT_TYPE");
+			intent.putExtra("ENCODE_DATA", output_string);
+			intent.putExtra("ENCODE_FORMAT", "QR_CODE");
+			startActivity(intent);
+			
+			break;
+		}
+		return true;
+	}
 }

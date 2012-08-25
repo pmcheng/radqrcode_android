@@ -78,7 +78,7 @@ versionName is 2.31, 2.4, or 3.0. -->
     </activity>
     <activity android:name=".encode.EncodeActivity" android:label="@string/share_name">
       <intent-filter>
-        <action android:name="com.google.zxing.client.android.ENCODE"/>
+        <action android:name="pmcheng.caseqrcode.ENCODE"/>
         <category android:name="android.intent.category.DEFAULT"/>
       </intent-filter>
       <!-- This allows us to handle the Share button in Contacts. -->
