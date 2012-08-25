@@ -56,6 +56,7 @@ public class EditActivity extends Activity {
 
 		Intent i = getIntent();
 		case_id = i.getLongExtra("id", -1);
+		boolean scanned=i.getBooleanExtra("scanned", false);
 		caseApp = (CaseQRCodeApp) super.getApplication();
 		Cursor c = null;
 		if (case_id == -1) {
@@ -113,8 +114,8 @@ public class EditActivity extends Activity {
 			}
 		});
 
-		Button btnUpdate = (Button) findViewById(R.id.btnUpdate);
-		btnUpdate.setOnClickListener(new View.OnClickListener() {
+		Button btnSave = (Button) findViewById(R.id.btnSave);
+		btnSave.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View v) {
 				String[] case_array = new String[6];
 				case_array[0] = e_loc.getText().toString();
@@ -137,7 +138,7 @@ public class EditActivity extends Activity {
 		});
 
 		ArrayList<String> locList = caseApp.getCaseData().getLocs();
-		locList.add(0, "---");
+		locList.add(0, "");
 
 		Spinner locSpinner = (Spinner) findViewById(R.id.spinnerLoc);
 		if (locList.size() > 1) {
@@ -177,6 +178,7 @@ public class EditActivity extends Activity {
 		} else {
 			btnDelete.setVisibility(View.VISIBLE);
 		}
+		
 		btnDelete.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View v) {
 				AlertDialog.Builder builder = new AlertDialog.Builder(
@@ -204,7 +206,13 @@ public class EditActivity extends Activity {
 			}
 		});
 
+		
 		Button btnCancel = (Button) findViewById(R.id.btnCancel);
+		if (scanned) {
+			btnCancel.setVisibility(View.GONE);
+		} else {
+			btnCancel.setVisibility(View.VISIBLE);
+		}		
 		btnCancel.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View v) {
 				finish();

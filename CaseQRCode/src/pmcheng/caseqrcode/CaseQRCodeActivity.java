@@ -82,7 +82,13 @@ public class CaseQRCodeActivity extends Activity implements OnItemClickListener 
 
 				Case radcase = new Case(contents);
 				CaseQRCodeApp caseApp = (CaseQRCodeApp) super.getApplication();
-				caseApp.getCaseData().insert(radcase);
+				long id=caseApp.getCaseData().insert(radcase);
+				if (id>=0) {
+					Intent i = new Intent(this, EditActivity.class);
+					i.putExtra("id", id);
+					i.putExtra("scanned", true);
+					startActivity(i);
+				}
 
 				// Handle successful scan
 			} else if (resultCode == RESULT_CANCELED) {
