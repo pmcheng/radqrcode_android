@@ -3,9 +3,14 @@ package pmcheng.caseqrcode;
 import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
+import java.io.FilenameFilter;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.AlertDialog.Builder;
+import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.app.SearchManager;
 import android.content.DialogInterface;
@@ -31,10 +36,16 @@ public class CaseQRCodeActivity extends Activity implements OnItemClickListener 
 
 	private static final String TAG = "CaseQRCodeActivity";
 
-	ListView listCases;
-	Cursor cursor;
-	SimpleCursorAdapter adapter;
+	private ListView listCases;
+	private Cursor cursor;
+	private SimpleCursorAdapter adapter;
 
+	private String[] mFileList;
+	private File mPath;
+	private String mChosenFile;
+	private static final String FTYPE = ".csv";
+	private static final int DIALOG_LOAD_FILE = 1000;
+	
 	static final String[] FROM = { CaseData.C_MRN, CaseData.C_DATE,
 			CaseData.C_DESC };
 	static final int[] TO = { R.id.textView1, R.id.textView2, R.id.textView3 };
@@ -72,6 +83,8 @@ public class CaseQRCodeActivity extends Activity implements OnItemClickListener 
 		} else {
 			setupList();
 		}
+		
+		mPath = new File(getStorageDir());
 	}
 
 	public void onActivityResult(int requestCode, int resultCode, Intent intent) {
@@ -82,8 +95,8 @@ public class CaseQRCodeActivity extends Activity implements OnItemClickListener 
 
 				Case radcase = new Case(contents);
 				CaseQRCodeApp caseApp = (CaseQRCodeApp) super.getApplication();
-				long id=caseApp.getCaseData().insert(radcase);
-				if (id>=0) {
+				long id = caseApp.getCaseData().insert(radcase);
+				if (id >= 0) {
 					Intent i = new Intent(this, EditActivity.class);
 					i.putExtra("id", id);
 					i.putExtra("scanned", true);
@@ -131,6 +144,51 @@ public class CaseQRCodeActivity extends Activity implements OnItemClickListener 
 		startActivity(i);
 	}
 
+
+
+	private void loadFileList() {
+		try {
+			mPath.mkdirs();
+		} catch (SecurityException e) {
+			Log.e(TAG, "unable to write on the sd card " + e.toString());
+		}
+		if (mPath.exists()) {
+			FilenameFilter filter = new FilenameFilter() {
+				public boolean accept(File dir, String filename) {
+					//File sel = new File(dir, filename);
+					return filename.contains(FTYPE);// || sel.isDirectory();
+				}
+			};
+			mFileList = mPath.list(filter);
+		} else {
+			mFileList = new String[0];
+		}
+	}
+
+	protected Dialog onCreateDialog(int id) {
+		Dialog dialog = null;
+		AlertDialog.Builder builder = new Builder(this);
+
+		switch (id) {
+		case DIALOG_LOAD_FILE:
+			builder.setTitle("Choose your file");
+			if (mFileList == null) {
+				Log.e(TAG, "Showing file picker before loading the file list");
+				dialog = builder.create();
+				return dialog;
+			}
+			builder.setItems(mFileList, new DialogInterface.OnClickListener() {
+				public void onClick(DialogInterface dialog, int which) {
+					mChosenFile = mPath.getAbsolutePath()+File.separatorChar+mFileList[which];
+					new ImportTask(CaseQRCodeActivity.this).execute();
+				}
+			});
+			break;
+		}
+		dialog = builder.show();
+		return dialog;
+	}
+
 	public boolean onCreateOptionsMenu(Menu menu) {
 		MenuInflater inflater = getMenuInflater();
 		inflater.inflate(R.menu.main_menu, menu);
@@ -149,7 +207,9 @@ public class CaseQRCodeActivity extends Activity implements OnItemClickListener 
 			startActivity(i);
 			break;
 		case R.id.import_cases:
-			new ImportTask(this).execute();
+			loadFileList();
+			showDialog(DIALOG_LOAD_FILE);
+			
 			break;
 		case R.id.export_cases:
 			new ExportTask(this).execute();
@@ -227,18 +287,18 @@ public class CaseQRCodeActivity extends Activity implements OnItemClickListener 
 			CSVReader reader;
 			count = 0;
 			try {
-				reader = new CSVReader(new FileReader(getStorageDir()
-						+ "cases.csv"));
+				reader = new CSVReader(new FileReader(mChosenFile));
 				reader.readNext();
 				String[] nextLine;
 				CaseQRCodeApp caseApp = (CaseQRCodeApp) getApplication();
-				
+
 				while ((nextLine = reader.readNext()) != null) {
-					if (nextLine.length<Case.LENGTH) continue;
-					String[] subset=new String[Case.LENGTH];
-					final int OFFSET=1;
+					if (nextLine.length < Case.LENGTH)
+						continue;
+					String[] subset = new String[Case.LENGTH];
+					final int OFFSET = 1;
 					for (int i = 0; i < subset.length; i++) {
-						subset[i]=nextLine[i+OFFSET];
+						subset[i] = nextLine[i + OFFSET];
 					}
 					Case radcase = new Case(subset);
 					caseApp.getCaseData().insert(radcase);
@@ -280,8 +340,13 @@ public class CaseQRCodeActivity extends Activity implements OnItemClickListener 
 			CSVWriter writer;
 			CaseQRCodeApp caseApp = (CaseQRCodeApp) getApplication();
 			try {
+				
+				SimpleDateFormat formatter = new SimpleDateFormat("yyyy_MM_dd_HHmm");
+				Date now = new Date();
+				String fileName = "cases_"+ formatter.format(now) + ".csv";
 				writer = new CSVWriter(new FileWriter(getStorageDir()
-						+ "cases_export.csv"));
+						+ fileName));
+
 				cursor.moveToFirst();
 				String[] header = { "id", "loc", "MRN", "study", "date",
 						"desc", "follow_up" };
