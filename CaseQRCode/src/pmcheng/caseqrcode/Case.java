@@ -44,6 +44,16 @@ public class Case {
 		follow_up = (input[5].equals("1")) ? 1 : 0;
 	}
 
+	public String concatenate() {
+		String output_string=loc+"|"+
+				MRN+"|"+
+				study+"|"+
+				date+"|"+
+				desc+"|"+
+				follow_up;
+		return output_string;
+	}
+
 	public String convertDate(String dateString) {
 		Log.v(TAG, "convertDate");
 		String[] formatStrings = { "M/d/yyyy", "yyyy-M-d", "M-d-yyyy",

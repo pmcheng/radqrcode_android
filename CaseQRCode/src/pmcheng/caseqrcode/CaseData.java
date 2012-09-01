@@ -109,9 +109,19 @@ public class CaseData {
 				null, null, null, null);
 	}
 
-	public Cursor getCaseById(long id) {
+	public Case getCaseById(long id) {
 		SQLiteDatabase db = this.dbHelper.getReadableDatabase();
-		return db.query(TABLE, null, C_ID + "=" + id, null, null, null, null);
+		Cursor c=db.query(TABLE, null, C_ID + "=" + id, null, null, null, null);
+		Case radcase=new Case();
+		if (c.moveToNext()) {
+			radcase.MRN = c.getString(c.getColumnIndex(CaseData.C_MRN));
+			radcase.loc= c.getString(c.getColumnIndex(CaseData.C_LOC));
+			radcase.study=c.getString(c.getColumnIndex(CaseData.C_STUDY));
+			radcase.date=c.getString(c.getColumnIndex(CaseData.C_DATE));
+			radcase.desc=c.getString(c.getColumnIndex(CaseData.C_DESC));
+			radcase.follow_up= c.getInt(c.getColumnIndex(CaseData.C_FOLLOW_UP));
+		}
+		return radcase;
 	}
 
 	/**

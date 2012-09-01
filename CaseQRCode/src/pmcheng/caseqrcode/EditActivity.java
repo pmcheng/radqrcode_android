@@ -12,7 +12,6 @@ import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.database.Cursor;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -59,9 +58,8 @@ public class EditActivity extends Activity {
 
 		Intent i = getIntent();
 		case_id = i.getLongExtra("id", -1);
-		boolean scanned=i.getBooleanExtra("scanned", false);
+		boolean scanned = i.getBooleanExtra("scanned", false);
 		caseApp = (CaseQRCodeApp) super.getApplication();
-		Cursor c = null;
 		if (case_id == -1) {
 			Calendar cal = Calendar.getInstance();
 			mYear = cal.get(Calendar.YEAR);
@@ -73,41 +71,32 @@ public class EditActivity extends Activity {
 
 		} else {
 
-			c = caseApp.getCaseData().getCaseById(case_id);
-			if (c.moveToNext()) {
-				String mrn = c.getString(c.getColumnIndex(CaseData.C_MRN));
-				e_mrn.setText(mrn);
+			Case radcase = caseApp.getCaseData().getCaseById(case_id);
 
-				String loc = c.getString(c.getColumnIndex(CaseData.C_LOC));
-				e_loc.setText(loc);
+			e_mrn.setText(radcase.MRN);
+			e_loc.setText(radcase.loc);
+			e_study.setText(radcase.study);
 
-				String study = c.getString(c.getColumnIndex(CaseData.C_STUDY));
-				e_study.setText(study);
+			b_date.setText(radcase.date);
 
-				String date = c.getString(c.getColumnIndex(CaseData.C_DATE));
-				b_date.setText(date);
-
-				SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-				Calendar cal = Calendar.getInstance();
-				try {
-					Date d = sdf.parse(date);
-					cal.setTime(d);
-				} catch (ParseException e) {
-					Log.v(TAG, e.getMessage());
-				}
-				mYear = cal.get(Calendar.YEAR);
-				mMonth = cal.get(Calendar.MONTH);
-				mDay = cal.get(Calendar.DAY_OF_MONTH);
-
-				Log.v(TAG, "Parsed date = " + mYear + "-" + (mMonth + 1) + "-"
-						+ mDay);
-
-				String desc = c.getString(c.getColumnIndex(CaseData.C_DESC));
-				e_desc.setText(desc);
-
-				Integer fu = c.getInt(c.getColumnIndex(CaseData.C_FOLLOW_UP));
-				cb_fu.setChecked(fu == 1);
+			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+			Calendar cal = Calendar.getInstance();
+			try {
+				Date d = sdf.parse(radcase.date);
+				cal.setTime(d);
+			} catch (ParseException e) {
+				Log.v(TAG, e.getMessage());
 			}
+			mYear = cal.get(Calendar.YEAR);
+			mMonth = cal.get(Calendar.MONTH);
+			mDay = cal.get(Calendar.DAY_OF_MONTH);
+
+			Log.v(TAG, "Parsed date = " + mYear + "-" + (mMonth + 1) + "-"
+					+ mDay);
+
+			e_desc.setText(radcase.desc);
+			cb_fu.setChecked(radcase.follow_up == 1);
+
 		}
 
 		b_date.setOnClickListener(new View.OnClickListener() {
@@ -120,15 +109,7 @@ public class EditActivity extends Activity {
 		Button btnSave = (Button) findViewById(R.id.btnSave);
 		btnSave.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View v) {
-				String[] case_array = new String[6];
-				case_array[0] = e_loc.getText().toString();
-				case_array[1] = e_mrn.getText().toString();
-				case_array[2] = e_study.getText().toString();
-				case_array[3] = b_date.getText().toString();
-				case_array[4] = e_desc.getText().toString();
-				case_array[5] = cb_fu.isChecked() ? "1" : "0";
-
-				Case radcase = new Case(case_array);
+				Case radcase = makeCase();
 
 				if (newCase) {
 					caseApp.getCaseData().insert(radcase);
@@ -181,7 +162,7 @@ public class EditActivity extends Activity {
 		} else {
 			btnDelete.setVisibility(View.VISIBLE);
 		}
-		
+
 		btnDelete.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View v) {
 				AlertDialog.Builder builder = new AlertDialog.Builder(
@@ -209,13 +190,12 @@ public class EditActivity extends Activity {
 			}
 		});
 
-		
 		Button btnCancel = (Button) findViewById(R.id.btnCancel);
 		if (scanned) {
 			btnCancel.setVisibility(View.GONE);
 		} else {
 			btnCancel.setVisibility(View.VISIBLE);
-		}		
+		}
 		btnCancel.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View v) {
 				finish();
@@ -258,26 +238,28 @@ public class EditActivity extends Activity {
 		inflater.inflate(R.menu.edit_menu, menu);
 		return true;
 	}
+
+	public Case makeCase() {
+		Case radcase = new Case();
+		radcase.loc = e_loc.getText().toString();
+		radcase.MRN = e_mrn.getText().toString();
+		radcase.study = e_study.getText().toString();
+		radcase.date = b_date.getText().toString();
+		radcase.desc = e_desc.getText().toString();
+		radcase.follow_up = cb_fu.isChecked() ? 1 : 0;
+
+		return radcase;
+	}
+
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
 		case R.id.create_qr:
-			String[] case_array = new String[6];
-			case_array[0] = e_loc.getText().toString();
-			case_array[1] = e_mrn.getText().toString();
-			case_array[2] = e_study.getText().toString();
-			case_array[3] = b_date.getText().toString();
-			case_array[4] = e_desc.getText().toString();
-			case_array[5] = cb_fu.isChecked() ? "1" : "0";
-			String output_string=case_array[0];
-			for (int i=1;i<case_array.length;i++) {
-				output_string=output_string+"|"+case_array[i];
-			}
+			Case radcase = makeCase();
 			Intent intent = new Intent("pmcheng.caseqrcode.ENCODE");
 			intent.putExtra("ENCODE_TYPE", "TEXT_TYPE");
-			intent.putExtra("ENCODE_DATA", output_string);
+			intent.putExtra("ENCODE_DATA", radcase.concatenate());
 			intent.putExtra("ENCODE_FORMAT", "QR_CODE");
 			startActivity(intent);
-			
 			break;
 		}
 		return true;

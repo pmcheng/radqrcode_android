@@ -11,5 +11,7 @@
     <string name="delete_db">Delete Database</string>
     <string name="new_case">New Case</string>
     <string name="create_qr">Create QR Code</string>
+    <string name="edit">Edit</string>
+    <string name="delete">Delete</string>
 
 </resources>
