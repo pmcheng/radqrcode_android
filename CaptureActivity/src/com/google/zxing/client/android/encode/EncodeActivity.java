@@ -159,7 +159,8 @@ public final class EncodeActivity extends Activity {
     Intent intent = getIntent();
     try {
       qrCodeEncoder = new QRCodeEncoder(this, intent, smallerDimension);
-      setTitle(getString(R.string.app_name) + " - " + qrCodeEncoder.getTitle());
+      setTitle(getString(R.string.app_name));
+      //setTitle(getString(R.string.app_name) + " - " + qrCodeEncoder.getTitle());
       Bitmap bitmap = qrCodeEncoder.encodeAsBitmap();
       ImageView view = (ImageView) findViewById(R.id.image_view);
       view.setImageBitmap(bitmap);

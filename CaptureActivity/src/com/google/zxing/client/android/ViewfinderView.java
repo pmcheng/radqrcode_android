@@ -106,7 +106,7 @@ public final class ViewfinderView extends View {
       paint.setAlpha(SCANNER_ALPHA[scannerAlpha]);
       scannerAlpha = (scannerAlpha + 1) % SCANNER_ALPHA.length;
       int middle = frame.height() / 2 + frame.top;
-      canvas.drawRect(frame.left + 2, middle - 1, frame.right - 1, middle + 2, paint);
+      //canvas.drawRect(frame.left + 2, middle - 1, frame.right - 1, middle + 2, paint);
       
       Rect previewFrame = CameraManager.get().getFramingRectInPreview();
       float scaleX = frame.width() / (float) previewFrame.width();
