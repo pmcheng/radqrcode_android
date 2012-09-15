@@ -188,8 +188,7 @@ public class CaseQRCodeActivity extends Activity implements OnItemClickListener 
 			}
 			builder.setItems(mFileList, new DialogInterface.OnClickListener() {
 				public void onClick(DialogInterface dialog, int which) {
-					mChosenFile = mPath.getAbsolutePath() + File.separatorChar
-							+ mFileList[which];
+					mChosenFile = new File(mPath.getAbsolutePath(),mFileList[which]).toString();
 					new ImportTask(CaseQRCodeActivity.this).execute();
 				}
 			});
@@ -259,12 +258,17 @@ public class CaseQRCodeActivity extends Activity implements OnItemClickListener 
 
 	public String getStorageDir() {
 		String url = Environment.getExternalStorageDirectory()
-				.getAbsolutePath() + File.separator;
+				.getAbsolutePath();
 		if (android.os.Build.DEVICE.toLowerCase().contains("samsung")
 				|| android.os.Build.MANUFACTURER.toLowerCase().contains(
 						"samsung")) {
-			url = url + "external_sd" + File.separator;
+			String testurl=new File(url,"external_sd").toString();
+			File testfolder=new File(testurl);
+			if (testfolder.exists()) url = testurl;
 		}
+		File storagedir=new File(url,"caseqrcode");
+		if (!storagedir.exists()) storagedir.mkdirs();
+		url=storagedir.toString();
 		Log.v(TAG, url);
 		return url;
 	}
@@ -358,8 +362,8 @@ public class CaseQRCodeActivity extends Activity implements OnItemClickListener 
 						"yyyy_MM_dd_HHmm");
 				Date now = new Date();
 				String fileName = "cases_" + formatter.format(now) + ".csv";
-				writer = new CSVWriter(new FileWriter(getStorageDir()
-						+ fileName));
+				String filePath= new File(getStorageDir(),fileName).toString();
+				writer = new CSVWriter(new FileWriter(filePath));
 
 				cursor.moveToFirst();
 				String[] header = { "id", "loc", "MRN", "study", "date",
