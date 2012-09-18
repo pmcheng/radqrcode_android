@@ -336,6 +336,7 @@ public class CaseQRCodeActivity extends Activity implements OnItemClickListener 
 	public class ExportTask extends AsyncTask<String, Void, Boolean> {
 		private ProgressDialog dialog;
 		public int count;
+		private String filePath;
 
 		public ExportTask(Activity activity) {
 			dialog = new ProgressDialog(CaseQRCodeActivity.this);
@@ -350,7 +351,7 @@ public class CaseQRCodeActivity extends Activity implements OnItemClickListener 
 			}
 			if (success)
 				Toast.makeText(CaseQRCodeActivity.this,
-						"Exported " + count + " entries.", Toast.LENGTH_SHORT)
+						"Exported " + count + " entries to "+filePath, Toast.LENGTH_SHORT)
 						.show();
 		}
 
@@ -362,7 +363,7 @@ public class CaseQRCodeActivity extends Activity implements OnItemClickListener 
 						"yyyy_MM_dd_HHmm");
 				Date now = new Date();
 				String fileName = "cases_" + formatter.format(now) + ".csv";
-				String filePath= new File(getStorageDir(),fileName).toString();
+				filePath= new File(getStorageDir(),fileName).toString();
 				writer = new CSVWriter(new FileWriter(filePath));
 
 				cursor.moveToFirst();
