@@ -16,6 +16,7 @@ import android.app.SearchManager;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
+import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
@@ -33,6 +34,7 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
+import android.widget.TextView;
 import android.widget.Toast;
 
 public class CaseQRCodeActivity extends Activity implements OnItemClickListener {
@@ -142,6 +144,40 @@ public class CaseQRCodeActivity extends Activity implements OnItemClickListener 
 		// Setup the adapter
 		adapter = new SimpleCursorAdapter(this, R.layout.row, cursor, FROM, TO);
 
+		// Add a ViewBinder to color code LACUSC and follow-up studies
+		final SimpleCursorAdapter.ViewBinder VIEW_BINDER = new SimpleCursorAdapter.ViewBinder() {
+		    public boolean setViewValue(View view, Cursor cursor, int columnIndex) {
+		        String name = cursor.getColumnName(columnIndex);
+		        if (name.equals(CaseData.C_MRN)) {
+		        	String mrn=cursor.getString(columnIndex);
+		        	TextView tv=(TextView) view;
+		        	tv.setText(mrn);
+		        	String loc=cursor.getString(cursor.getColumnIndex(CaseData.C_LOC));
+		            if (loc.equals("LACUSC")) {
+		            	((TextView) view).setTextColor(Color.GREEN);
+		            } else {
+		            	((TextView) view).setTextColor(Color.WHITE);
+		            }
+		            return true;
+		        }
+		        if (name.equals(CaseData.C_DESC)) {
+		        	String desc=cursor.getString(columnIndex);
+		        	TextView tv=(TextView) view;
+		        	tv.setText(desc);
+		        	String fu=cursor.getString(cursor.getColumnIndex(CaseData.C_FOLLOW_UP));
+		            if (fu.equals("1")) {
+		            	((TextView) view).setTextColor(Color.RED);
+		            } else {
+		            	((TextView) view).setTextColor(Color.WHITE);
+		            }
+		            return true;
+		        }
+		        return false;
+		    }
+		};
+		adapter.setViewBinder(VIEW_BINDER);
+		
+		
 		listCases.setAdapter(adapter);
 		listCases.setOnItemClickListener(this);
 	}
