@@ -1,10 +1,12 @@
-package pmcheng.caseqrcode;
+package pmcheng.radqrcode;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+
+import pmcheng.radqrcode.R;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -33,7 +35,7 @@ public class EditActivity extends Activity {
 	EditText e_mrn, e_loc, e_study, e_desc;
 	Button b_date;
 	CheckBox cb_fu;
-	CaseQRCodeApp caseApp;
+	RadQRCodeApp caseApp;
 	boolean newCase = false;
 	boolean spinnerInitialized = false;
 
@@ -59,7 +61,7 @@ public class EditActivity extends Activity {
 		Intent i = getIntent();
 		case_id = i.getLongExtra("id", -1);
 		boolean scanned = i.getBooleanExtra("scanned", false);
-		caseApp = (CaseQRCodeApp) super.getApplication();
+		caseApp = (RadQRCodeApp) super.getApplication();
 		if (case_id == -1) {
 			Calendar cal = Calendar.getInstance();
 			mYear = cal.get(Calendar.YEAR);

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="pmcheng.caseqrcode"
+    package="pmcheng.radqrcode"
     android:versionCode="1"
     android:versionName="1.0" >
 
@@ -10,11 +10,11 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
     <application
-        android:name=".CaseQRCodeApp"
+        android:name="pmcheng.radqrcode.RadQRCodeApp"
         android:icon="@drawable/icon"
         android:label="@string/app_name" >
         <activity
-            android:name=".CaseQRCodeActivity"
+            android:name="pmcheng.radqrcode.RadQRCodeActivity"
             android:label="@string/app_name" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -30,7 +30,7 @@
                 android:resource="@xml/searchable" />
         </activity>
         <activity
-            android:name=".EditActivity"
+            android:name="pmcheng.radqrcode.EditActivity"
             android:label="Edit" >
         </activity>
         <activity

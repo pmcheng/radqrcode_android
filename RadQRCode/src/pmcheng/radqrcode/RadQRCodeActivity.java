@@ -1,4 +1,4 @@
-package pmcheng.caseqrcode;
+package pmcheng.radqrcode;
 
 import java.io.File;
 import java.io.FileReader;
@@ -6,6 +6,8 @@ import java.io.FileWriter;
 import java.io.FilenameFilter;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+
+import pmcheng.radqrcode.R;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -37,9 +39,9 @@ import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class CaseQRCodeActivity extends Activity implements OnItemClickListener {
+public class RadQRCodeActivity extends Activity implements OnItemClickListener {
 
-	private static final String TAG = "CaseQRCodeActivity";
+	private static final String TAG = "RadQRCodeActivity";
 
 	private ListView listCases;
 	private Cursor cursor;
@@ -56,7 +58,7 @@ public class CaseQRCodeActivity extends Activity implements OnItemClickListener 
 	static final int[] TO = { R.id.textView1, R.id.textView2, R.id.textView3 };
 	
 	long case_id;
-	CaseQRCodeApp caseApp;
+	RadQRCodeApp caseApp;
 	
 	
 	@Override
@@ -65,7 +67,7 @@ public class CaseQRCodeActivity extends Activity implements OnItemClickListener 
 		
 		setContentView(R.layout.main);
 		
-		caseApp= (CaseQRCodeApp) super.getApplication();
+		caseApp= (RadQRCodeApp) super.getApplication();
 
 		Log.v(TAG, "onCreate");
 
@@ -225,7 +227,7 @@ public class CaseQRCodeActivity extends Activity implements OnItemClickListener 
 			builder.setItems(mFileList, new DialogInterface.OnClickListener() {
 				public void onClick(DialogInterface dialog, int which) {
 					mChosenFile = new File(mPath.getAbsolutePath(),mFileList[which]).toString();
-					new ImportTask(CaseQRCodeActivity.this).execute();
+					new ImportTask(RadQRCodeActivity.this).execute();
 				}
 			});
 			break;
@@ -256,7 +258,7 @@ public class CaseQRCodeActivity extends Activity implements OnItemClickListener 
 			if (mFileList.length > 0) {
 				showDialog(DIALOG_LOAD_FILE);
 			} else {
-				Toast.makeText(CaseQRCodeActivity.this,
+				Toast.makeText(RadQRCodeActivity.this,
 						"No .csv files found to import.", Toast.LENGTH_SHORT)
 						.show();
 			}
@@ -267,7 +269,7 @@ public class CaseQRCodeActivity extends Activity implements OnItemClickListener 
 			break;
 		case R.id.delete_db:
 			AlertDialog.Builder builder = new AlertDialog.Builder(
-					CaseQRCodeActivity.this);
+					RadQRCodeActivity.this);
 			builder.setCancelable(false)
 					.setTitle("Delete all data?")
 					.setIcon(R.drawable.ic_dialog_alert)
@@ -314,7 +316,7 @@ public class CaseQRCodeActivity extends Activity implements OnItemClickListener 
 		public int count;
 
 		public ImportTask(Activity activity) {
-			dialog = new ProgressDialog(CaseQRCodeActivity.this);
+			dialog = new ProgressDialog(RadQRCodeActivity.this);
 			this.dialog.setMessage("Loading...");
 			this.dialog.show();
 		}
@@ -326,7 +328,7 @@ public class CaseQRCodeActivity extends Activity implements OnItemClickListener 
 			}
 			setupList();
 			if (success)
-				Toast.makeText(CaseQRCodeActivity.this,
+				Toast.makeText(RadQRCodeActivity.this,
 						"Imported " + count + " entries.", Toast.LENGTH_SHORT)
 						.show();
 
@@ -375,7 +377,7 @@ public class CaseQRCodeActivity extends Activity implements OnItemClickListener 
 		private String filePath;
 
 		public ExportTask(Activity activity) {
-			dialog = new ProgressDialog(CaseQRCodeActivity.this);
+			dialog = new ProgressDialog(RadQRCodeActivity.this);
 			this.dialog.setMessage("Saving...");
 			this.dialog.show();
 		}
@@ -386,7 +388,7 @@ public class CaseQRCodeActivity extends Activity implements OnItemClickListener 
 				dialog.dismiss();
 			}
 			if (success)
-				Toast.makeText(CaseQRCodeActivity.this,
+				Toast.makeText(RadQRCodeActivity.this,
 						"Exported " + count + " entries to "+filePath, Toast.LENGTH_SHORT)
 						.show();
 		}
@@ -439,7 +441,7 @@ public class CaseQRCodeActivity extends Activity implements OnItemClickListener 
 	        case R.id.delete:
 	        	case_id=info.id;
 				AlertDialog.Builder builder = new AlertDialog.Builder(
-						CaseQRCodeActivity.this);
+						RadQRCodeActivity.this);
 				builder.setTitle("Delete this case?")
 						.setCancelable(false)
 						.setIcon(R.drawable.ic_dialog_alert)

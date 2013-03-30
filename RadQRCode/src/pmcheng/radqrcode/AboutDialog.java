@@ -1,8 +1,10 @@
-package pmcheng.caseqrcode;
+package pmcheng.radqrcode;
 
 import java.text.SimpleDateFormat;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
+
+import pmcheng.radqrcode.R;
 
 import android.app.Dialog;
 import android.content.Context;
