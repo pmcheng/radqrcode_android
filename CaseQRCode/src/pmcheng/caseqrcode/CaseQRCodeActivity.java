@@ -72,7 +72,7 @@ public class CaseQRCodeActivity extends Activity implements OnItemClickListener 
 		Button buttonScan = (Button) findViewById(R.id.buttonScan);
 		buttonScan.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
-				Intent intent = new Intent("pmcheng.caseqrcode.SCAN");
+				Intent intent = new Intent("pmcheng.radqrcode.SCAN");
 				intent.putExtra("SCAN_MODE", "QR_CODE_MODE");
 				startActivityForResult(intent, 0);
 			}
@@ -302,7 +302,7 @@ public class CaseQRCodeActivity extends Activity implements OnItemClickListener 
 			File testfolder=new File(testurl);
 			if (testfolder.exists()) url = testurl;
 		}
-		File storagedir=new File(url,"caseqrcode");
+		File storagedir=new File(url,"radqrcode");
 		if (!storagedir.exists()) storagedir.mkdirs();
 		url=storagedir.toString();
 		Log.v(TAG, url);
@@ -463,7 +463,7 @@ public class CaseQRCodeActivity extends Activity implements OnItemClickListener 
 	            return true;
 	        case R.id.create_qr:
 				Case radcase=caseApp.getCaseData().getCaseById(info.id);
-				Intent intent = new Intent("pmcheng.caseqrcode.ENCODE");
+				Intent intent = new Intent("pmcheng.radqrcode.ENCODE");
 				intent.putExtra("ENCODE_TYPE", "TEXT_TYPE");
 				intent.putExtra("ENCODE_DATA", radcase.concatenate());
 				intent.putExtra("ENCODE_FORMAT", "QR_CODE");

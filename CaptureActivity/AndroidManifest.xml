@@ -48,7 +48,7 @@ versionName is 2.31, 2.4, or 3.0. -->
         <category android:name="android.intent.category.LAUNCHER"/>
       </intent-filter>
       <intent-filter>
-        <action android:name="pmcheng.caseqrcode.SCAN"/>
+        <action android:name="pmcheng.radqrcode.SCAN"/>
         <category android:name="android.intent.category.DEFAULT"/>
       </intent-filter>
       <!-- Allow web apps to launch Barcode Scanner by linking to http://zxing.appspot.com/scan. -->
@@ -78,7 +78,7 @@ versionName is 2.31, 2.4, or 3.0. -->
     </activity>
     <activity android:name=".encode.EncodeActivity" android:label="@string/share_name">
       <intent-filter>
-        <action android:name="pmcheng.caseqrcode.ENCODE"/>
+        <action android:name="pmcheng.radqrcode.ENCODE"/>
         <category android:name="android.intent.category.DEFAULT"/>
       </intent-filter>
       <!-- This allows us to handle the Share button in Contacts. -->

@@ -49,7 +49,7 @@ public class AboutDialog extends Dialog {
 		Linkify.addLinks(tv, Linkify.ALL);
 		
 		tv = (TextView)findViewById(R.id.info_text);
-		tv.setText(Html.fromHtml("<h3>CaseQRCode</h3>"+buildDate+"<br>by Phillip Cheng, MD MS<br><br>phillip.cheng@usc.edu"));
+		tv.setText(Html.fromHtml("<h3>RadQRCode</h3>"+buildDate+"<br>by Phillip Cheng, MD MS<br><br>phillip.cheng@usc.edu"));
 		tv.setLinkTextColor(Color.WHITE);
 		Linkify.addLinks(tv, Linkify.ALL);
 	}

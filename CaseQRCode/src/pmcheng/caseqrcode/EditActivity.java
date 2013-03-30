@@ -255,7 +255,7 @@ public class EditActivity extends Activity {
 		switch (item.getItemId()) {
 		case R.id.create_qr:
 			Case radcase = makeCase();
-			Intent intent = new Intent("pmcheng.caseqrcode.ENCODE");
+			Intent intent = new Intent("pmcheng.radqrcode.ENCODE");
 			intent.putExtra("ENCODE_TYPE", "TEXT_TYPE");
 			intent.putExtra("ENCODE_DATA", radcase.concatenate());
 			intent.putExtra("ENCODE_FORMAT", "QR_CODE");

@@ -3,7 +3,7 @@
   xmlns:tools="http://schemas.android.com/tools"
   tools:ignore="MissingTranslation" >    
     
-    <string name="app_name">CaseQRCode</string>
+    <string name="app_name">RadQRCode</string>
     <string name="search_hint">Search for cases</string>
     <string name="about">About</string>
     <string name="import_cases">Import</string>

@@ -45,7 +45,7 @@
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
             <intent-filter>
-                <action android:name="pmcheng.caseqrcode.SCAN" />
+                <action android:name="pmcheng.radqrcode.SCAN" />
 
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
@@ -54,7 +54,7 @@
             android:name="com.google.zxing.client.android.encode.EncodeActivity"
             android:label="@string/share_name" >
             <intent-filter>
-                <action android:name="pmcheng.caseqrcode.ENCODE" />
+                <action android:name="pmcheng.radqrcode.ENCODE" />
 
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
