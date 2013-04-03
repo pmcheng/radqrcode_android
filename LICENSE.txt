@@ -1,4 +1,4 @@
-Unless otherwise specified, the RadQRCode package has the following
+Unless otherwise specified, the RadQRCode Android package has the following
 copyright:
 
 Copyright (C) 2013 Phillip Cheng, MD MS
@@ -16,9 +16,9 @@ Copyright (C) 2013 Phillip Cheng, MD MS
    limitations under the License.
    
 --------------------------------------------------
-SOFTWARE DISTRIBUTED WITH CaseMaker
+SOFTWARE DISTRIBUTED WITH RadQRCode Android
 
-The CaseMaker software includes a number of subcomponents with
+The RadQRCode Android software includes a number of subcomponents with
 separate copyright notices and license terms. Your use of the source
 code for the these subcomponents is subject to the terms and
 conditions of the following licenses:   
