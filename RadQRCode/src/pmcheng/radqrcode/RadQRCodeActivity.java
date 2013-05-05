@@ -60,6 +60,7 @@ public class RadQRCodeActivity extends Activity implements OnItemClickListener {
 	long case_id;
 	RadQRCodeApp caseApp;
 	
+	boolean searchResults=false;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -90,17 +91,26 @@ public class RadQRCodeActivity extends Activity implements OnItemClickListener {
 		listCases = (ListView) findViewById(R.id.listViewCases);
 		registerForContextMenu(listCases);
 
-		// Get the intent, verify the action and get the query
-		Intent intent = getIntent();
-		if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
-			String query = intent.getStringExtra(SearchManager.QUERY);
-			setupList(query);
-		} else {
-			setupList();
-		}
+		handleIntent(getIntent());
 
 		mPath = new File(getStorageDir());
 		
+	}
+	
+	@Override
+	protected void onNewIntent(Intent intent) {
+	    setIntent(intent);
+	    handleIntent(intent);
+	}
+	
+	private void handleIntent(Intent intent) {
+		if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
+			String query = intent.getStringExtra(SearchManager.QUERY);
+			searchResults=true;
+			setupList(query);
+		} else {
+			setupList();
+		}		
 	}
 
 	public void onActivityResult(int requestCode, int resultCode, Intent intent) {
@@ -133,6 +143,18 @@ public class RadQRCodeActivity extends Activity implements OnItemClickListener {
 		// setupList();
 	}
 
+	
+	@Override
+    public void onBackPressed() {
+         if (!searchResults) {
+             super.onBackPressed();
+             return;
+         } 
+         searchResults=false;
+         setupList();
+    } 
+	
+	
 	// Responsible for fetching data and setting up the list and the adapter
 	private void setupList() {
 		setupList("");
@@ -168,7 +190,7 @@ public class RadQRCodeActivity extends Activity implements OnItemClickListener {
 		        	tv.setText(desc);
 		        	String fu=cursor.getString(cursor.getColumnIndex(CaseData.C_FOLLOW_UP));
 		            if (fu.equals("1")) {
-		            	((TextView) view).setTextColor(Color.RED);
+		            	((TextView) view).setTextColor(Color.rgb(0xff,0xc0,0x40));
 		            } else {
 		            	((TextView) view).setTextColor(Color.WHITE);
 		            }
