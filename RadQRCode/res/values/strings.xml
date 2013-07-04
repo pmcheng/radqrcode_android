@@ -15,5 +15,13 @@
     <string name="create_qr">Create QR Code</string>
     <string name="edit">Edit</string>
     <string name="delete">Delete</string>
+    <string name="description">Description</string>
+    <string name="mrn">MRN</string>
+    <string name="location">Location</string>
+    <string name="date">Date</string>
+    <string name="study">Study</string>
+    <string name="follow_up">Follow-up</string>
+    <string name="save">Save</string>
+    <string name="cancel">Cancel</string>
 
 </resources>

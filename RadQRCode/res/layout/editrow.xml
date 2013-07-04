@@ -11,19 +11,19 @@
 
         <LinearLayout
             android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
+            android:layout_height="wrap_content"
             android:orientation="vertical" >
 
             <TextView
                 android:id="@+id/textViewDesc"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Description" />
+                android:text="@string/description" />
 
             <EditText
                 android:id="@+id/editDesc"
                 android:layout_width="fill_parent"
-                android:layout_height="100dp"
+                android:layout_height="wrap_content"
                 android:ems="10"
                 android:gravity="top|left"
                 android:inputType="textMultiLine" />
@@ -32,7 +32,7 @@
                 android:id="@+id/textViewMRN"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="MRN" />
+                android:text="@string/mrn" />
 
             <EditText
                 android:id="@+id/editMRN"
@@ -45,18 +45,18 @@
                 android:id="@+id/textViewLoc"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Location" />
+                android:text="@string/location" />
 
             <LinearLayout
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content" >
-			    >
 
                 <EditText
                     android:id="@+id/editLoc"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
+                    android:inputType="text"
                     android:ems="10" />
 
                 <Spinner
@@ -70,7 +70,7 @@
                 android:id="@+id/textViewDate"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Date" />
+                android:text="@string/date" />
 
             <Button
                 android:id="@+id/btnDate"
@@ -82,19 +82,20 @@
                 android:id="@+id/textViewStudy"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Study" />
+                android:text="@string/study" />
 
             <EditText
                 android:id="@+id/editStudy"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
+                android:inputType="text"
                 android:ems="10" />
 
             <CheckBox
                 android:id="@+id/checkBoxFollow"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:text="Follow-up" />
+                android:text="@string/follow_up" />
         </LinearLayout>
     </ScrollView>
 
@@ -107,21 +108,21 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="Save" />
+            android:text="@string/save" />
 
         <Button
             android:id="@+id/btnDelete"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="Delete" />
+            android:text="@string/delete" />
 
         <Button
             android:id="@+id/btnCancel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="Cancel" />
+            android:text="@string/cancel" />
     </LinearLayout>
 
 </LinearLayout>
