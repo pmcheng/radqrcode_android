@@ -6,6 +6,7 @@ import java.io.FileWriter;
 import java.io.FilenameFilter;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Locale;
 
 import pmcheng.radqrcode.R;
 
@@ -50,7 +51,6 @@ public class RadQRCodeActivity extends Activity implements OnItemClickListener {
 	private String[] mFileList;
 	private File mPath;
 	private String mChosenFile;
-	private static final String FTYPE = ".csv";
 	private static final int DIALOG_LOAD_FILE = 1000;
 
 	static final String[] FROM = { CaseData.C_MRN, CaseData.C_DATE,
@@ -216,16 +216,10 @@ public class RadQRCodeActivity extends Activity implements OnItemClickListener {
 	}
 
 	private void loadFileList() {
-		try {
-			mPath.mkdirs();
-		} catch (SecurityException e) {
-			Log.e(TAG, "unable to write on the sd card " + e.toString());
-		}
 		if (mPath.exists()) {
 			FilenameFilter filter = new FilenameFilter() {
 				public boolean accept(File dir, String filename) {
-					// File sel = new File(dir, filename);
-					return filename.contains(FTYPE);// || sel.isDirectory();
+					return filename.contains(".csv");
 				}
 			};
 			mFileList = mPath.list(filter);
@@ -317,20 +311,13 @@ public class RadQRCodeActivity extends Activity implements OnItemClickListener {
 	}
 
 	public String getStorageDir() {
-		String url = Environment.getExternalStorageDirectory()
+		String path = Environment.getExternalStorageDirectory()
 				.getAbsolutePath();
-		if (android.os.Build.DEVICE.toLowerCase().contains("samsung")
-				|| android.os.Build.MANUFACTURER.toLowerCase().contains(
-						"samsung")) {
-			String testurl=new File(url,"external_sd").toString();
-			File testfolder=new File(testurl);
-			if (testfolder.exists()) url = testurl;
-		}
-		File storagedir=new File(url,"radqrcode");
+		File storagedir=new File(path,"radqrcode");
 		if (!storagedir.exists()) storagedir.mkdirs();
-		url=storagedir.toString();
-		Log.v(TAG, url);
-		return url;
+		path=storagedir.toString();
+		Log.v(TAG, path);
+		return path;
 	}
 
 	public class ImportTask extends AsyncTask<String, Integer, Boolean> {
@@ -411,8 +398,13 @@ public class RadQRCodeActivity extends Activity implements OnItemClickListener {
 			}
 			if (success)
 				Toast.makeText(RadQRCodeActivity.this,
-						"Exported " + count + " entries to "+filePath, Toast.LENGTH_SHORT)
+						"Exported " + count + " entries to "+filePath, Toast.LENGTH_LONG)
 						.show();
+			else 
+				Toast.makeText(RadQRCodeActivity.this,
+						"Could not export to  "+filePath, Toast.LENGTH_LONG)
+						.show();
+				
 		}
 
 		protected Boolean doInBackground(final String... args) {
@@ -420,7 +412,7 @@ public class RadQRCodeActivity extends Activity implements OnItemClickListener {
 			try {
 
 				SimpleDateFormat formatter = new SimpleDateFormat(
-						"yyyy_MM_dd_HHmm");
+						"yyyy_MM_dd_HHmm", Locale.US);
 				Date now = new Date();
 				String fileName = "cases_" + formatter.format(now) + ".csv";
 				filePath= new File(getStorageDir(),fileName).toString();
