@@ -106,7 +106,7 @@ public class CaseData {
 			return db.query(TABLE, null, null, null, null, null, C_DATE+" DESC");
 		}
 		return db.query(TABLE, null, C_DESC + " LIKE '%"+query+"%'",
-				null, null, null, null);
+				null, null, null, C_DATE+" DESC");
 	}
 
 	public Case getCaseById(long id) {
