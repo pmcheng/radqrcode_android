@@ -371,7 +371,7 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
       // This is from history -- no saved barcode
       handleDecodeInternally(rawResult, resultHandler, null);
     } else {
-      beepManager.playBeepSoundAndVibrate();
+      //beepManager.playBeepSoundAndVibrate();
       drawResultPoints(barcode, rawResult);
       switch (source) {
         case NATIVE_APP_INTENT:
