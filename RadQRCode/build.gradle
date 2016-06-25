@@ -1,13 +1,13 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 8
+    compileSdkVersion 9
     buildToolsVersion "23.0.1"
 
     defaultConfig {
         applicationId "pmcheng.radqrcode"
-        minSdkVersion 7
-        targetSdkVersion 7
+        minSdkVersion 9
+        targetSdkVersion 9
         compileOptions {
             sourceCompatibility JavaVersion.VERSION_1_6
             targetCompatibility JavaVersion.VERSION_1_6
