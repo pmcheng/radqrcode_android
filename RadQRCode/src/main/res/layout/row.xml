@@ -20,7 +20,8 @@
         android:layout_alignParentTop="true"
         android:text="267-000011112233"
         android:textAppearance="?android:attr/textAppearanceMedium" />
-
+
+
     <TextView
         android:id="@+id/textView3"
         android:layout_width="fill_parent"
