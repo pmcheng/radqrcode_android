@@ -138,7 +138,7 @@ public final class CameraManager {
     SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
     reverseImage = prefs.getBoolean(PreferencesActivity.KEY_REVERSE_IMAGE, false);
     if (prefs.getBoolean(PreferencesActivity.KEY_FRONT_LIGHT, false)) {
-      FlashlightManager.enableFlashlight();
+      //FlashlightManager.enableFlashlight();
     }
   }
 
@@ -147,7 +147,7 @@ public final class CameraManager {
    */
   public void closeDriver() {
     if (camera != null) {
-      FlashlightManager.disableFlashlight();
+      //FlashlightManager.disableFlashlight();
       camera.release();
       camera = null;
 
