@@ -47,11 +47,11 @@ public class AboutDialog extends Dialog {
 		}
 
 		TextView tv = (TextView)findViewById(R.id.legal_text);
-		tv.setText(Html.fromHtml("Uses the open source ZXing Barcode Reader<br>http://code.google.com/p/zxing/"));	
+		tv.setText(Html.fromHtml("Uses the open source ZXing Barcode Reader<br>https://github.com/zxing/zxing"));
 		Linkify.addLinks(tv, Linkify.ALL);
 		
 		tv = (TextView)findViewById(R.id.info_text);
-		tv.setText(Html.fromHtml("<h3>RadQRCode</h3>"+buildDate+"<br>by Phillip Cheng, MD MS<br><br>phillip.cheng@usc.edu"));
+		tv.setText(Html.fromHtml("<h3>RadQRCode</h3>"+buildDate+"<br>by Phillip Cheng, MD MS<br><br>phillip.cheng@med.usc.edu"));
 		tv.setLinkTextColor(Color.WHITE);
 		Linkify.addLinks(tv, Linkify.ALL);
 	}

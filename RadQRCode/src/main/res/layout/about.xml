@@ -13,14 +13,13 @@
         <TableRow><ImageView
                 android:layout_width="fill_parent"
                 android:layout_height="fill_parent"
-                android:layout_gravity="center"
                 android:adjustViewBounds="true"
                 android:scaleType="fitCenter"
-                android:src="@drawable/icon" />
+                android:src="@mipmap/icon_fancy" />
 
             <TextView
                 android:id="@+id/info_text"
-                android:layout_width="wrap_content"
+                android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:gravity="center" />
