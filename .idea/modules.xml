@@ -2,9 +2,9 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/captureActivity/captureActivity.iml" filepath="$PROJECT_DIR$/captureActivity/captureActivity.iml" />
-      <module fileurl="file://$PROJECT_DIR$/radQRCode/radQRCode.iml" filepath="$PROJECT_DIR$/radQRCode/radQRCode.iml" />
       <module fileurl="file://$PROJECT_DIR$/radqrcode.iml" filepath="$PROJECT_DIR$/radqrcode.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/captureActivity/radqrcode.captureActivity.iml" filepath="$PROJECT_DIR$/.idea/modules/captureActivity/radqrcode.captureActivity.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/radQRCode/radqrcode.radQRCode.iml" filepath="$PROJECT_DIR$/.idea/modules/radQRCode/radqrcode.radQRCode.iml" />
     </modules>
   </component>
 </project>

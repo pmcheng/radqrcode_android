@@ -1,12 +1,13 @@
 apply plugin: 'com.android.library'
 
 android {
-    compileSdkVersion 9
-    buildToolsVersion "23.0.1"
+    compileSdkVersion 30
+    buildToolsVersion '29.0.2'
 
+    useLibrary 'org.apache.http.legacy'
     defaultConfig {
-        minSdkVersion 9
-        targetSdkVersion 9
+        minSdkVersion 21
+        targetSdkVersion 26
         compileOptions {
             sourceCompatibility JavaVersion.VERSION_1_6
             targetCompatibility JavaVersion.VERSION_1_6
@@ -22,5 +23,5 @@ android {
 }
 
 dependencies {
-    compile files('libs/core.jar')
+    implementation files('libs/core.jar')
 }

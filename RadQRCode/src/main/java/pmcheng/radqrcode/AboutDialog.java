@@ -35,23 +35,12 @@ public class AboutDialog extends Dialog {
 		
 		setContentView(R.layout.about);
 
-		String buildDate="";
-		try{
-		     ApplicationInfo ai = mContext.getPackageManager().getApplicationInfo(mContext.getPackageName(), 0);
-		     ZipFile zf = new ZipFile(ai.sourceDir);
-		     ZipEntry ze = zf.getEntry("classes.dex");
-		     long time = ze.getTime();
-		     buildDate= SimpleDateFormat.getInstance().format(new java.util.Date(time));
-
-		} catch(Exception e) {
-		}
-
 		TextView tv = (TextView)findViewById(R.id.legal_text);
-		tv.setText(Html.fromHtml("Uses the open source ZXing Barcode Reader<br>https://github.com/zxing/zxing"));
+		tv.setText(Html.fromHtml("Uses the ZXing Barcode Reader<br>https://github.com/zxing/zxing"));
 		Linkify.addLinks(tv, Linkify.ALL);
 		
 		tv = (TextView)findViewById(R.id.info_text);
-		tv.setText(Html.fromHtml("<h3>RadQRCode</h3>"+buildDate+"<br>by Phillip Cheng, MD MS<br><br>phillip.cheng@med.usc.edu"));
+		tv.setText(Html.fromHtml("<h3>RadQRCode</h3><br>by Phillip Cheng, MD MS<br><br>phillip.cheng@med.usc.edu"));
 		tv.setLinkTextColor(Color.WHITE);
 		Linkify.addLinks(tv, Linkify.ALL);
 	}

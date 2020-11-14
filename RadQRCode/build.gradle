@@ -1,13 +1,14 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 9
-    buildToolsVersion "23.0.1"
+    compileSdkVersion 30
+
+    buildToolsVersion "29.0.2"
 
     defaultConfig {
         applicationId "pmcheng.radqrcode"
-        minSdkVersion 9
-        targetSdkVersion 9
+        minSdkVersion 21
+        targetSdkVersion 30
         compileOptions {
             sourceCompatibility JavaVersion.VERSION_1_6
             targetCompatibility JavaVersion.VERSION_1_6
@@ -23,5 +24,5 @@ android {
 }
 
 dependencies {
-    compile project(':captureActivity')
+    implementation project(':captureActivity')
 }
