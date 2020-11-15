@@ -312,11 +312,12 @@ public class RadQRCodeActivity extends Activity implements OnItemClickListener {
 	}
 
 	public String getStorageDir() {
-		String path = Environment.getExternalStorageDirectory()
-				.getAbsolutePath();
-		File storagedir=new File(path,"radqrcode");
-		if (!storagedir.exists()) storagedir.mkdirs();
-		path=storagedir.toString();
+		//String path = Environment.getExternalStorageDirectory()
+		//		.getAbsolutePath();
+		//File storagedir=new File(path,"radqrcode");
+		//if (!storagedir.exists()) storagedir.mkdirs();
+		File storagedir = this.getExternalFilesDir(null);
+		String path=storagedir.toString();
 		Log.v(TAG, path);
 		return path;
 	}
