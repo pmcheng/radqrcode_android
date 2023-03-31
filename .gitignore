@@ -1,5 +1,6 @@
 # built application files
 *.apk
+*.aab
 *.ap_
 
 # files for the dex VM
@@ -17,13 +18,10 @@ gen/
 *.bak
 *.swp
 
+# IntelliJ
+*.iml
+.idea/
 
-# Android Studio / IntelliJ IDEA 
-*.iws
-.idea/libraries
-.idea/tasks.xml
-.idea/vcs.xml
-.idea/workspace.xml
 
 .gradle/
 build/

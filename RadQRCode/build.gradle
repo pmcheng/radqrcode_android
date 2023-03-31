@@ -1,18 +1,13 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 30
-
-    buildToolsVersion "29.0.2"
+    compileSdkVersion 33
 
     defaultConfig {
         applicationId "pmcheng.radqrcode"
         minSdkVersion 21
-        targetSdkVersion 30
-        compileOptions {
-            sourceCompatibility JavaVersion.VERSION_1_6
-            targetCompatibility JavaVersion.VERSION_1_6
-        }
+        targetSdkVersion 33
+
     }
 
     buildTypes {
@@ -21,6 +16,7 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.txt'
         }
     }
+    namespace 'pmcheng.radqrcode'
 }
 
 dependencies {
