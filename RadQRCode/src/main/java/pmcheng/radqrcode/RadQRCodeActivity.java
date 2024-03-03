@@ -189,25 +189,31 @@ public class RadQRCodeActivity extends Activity implements OnItemClickListener {
 		        	String mrn=cursor.getString(columnIndex);
 		        	TextView tv=(TextView) view;
 		        	tv.setText(mrn);
-		        	String loc=cursor.getString(cursor.getColumnIndex(CaseData.C_LOC));
-		            if (loc.equals("LACUSC")) {
-		            	((TextView) view).setTextColor(Color.GREEN);
-		            } else {
-		            	((TextView) view).setTextColor(Color.WHITE);
-		            }
-		            return true;
+					int sel=cursor.getColumnIndex(CaseData.C_LOC);
+					if (sel>=0) {
+						String loc = cursor.getString(sel);
+						if (loc.equals("LACUSC")) {
+							((TextView) view).setTextColor(Color.GREEN);
+						} else {
+							((TextView) view).setTextColor(Color.WHITE);
+						}
+						return true;
+					}
 		        }
 		        if (name.equals(CaseData.C_DESC)) {
 		        	String desc=cursor.getString(columnIndex);
 		        	TextView tv=(TextView) view;
 		        	tv.setText(desc);
-		        	String fu=cursor.getString(cursor.getColumnIndex(CaseData.C_FOLLOW_UP));
-		            if (fu.equals("1")) {
-		            	((TextView) view).setTextColor(Color.rgb(0xff,0xc0,0x40));
-		            } else {
-		            	((TextView) view).setTextColor(Color.WHITE);
-		            }
-		            return true;
+					int sel=cursor.getColumnIndex(CaseData.C_LOC);
+					if (sel>=0) {
+						String fu = cursor.getString(sel);
+						if (fu.equals("1")) {
+							((TextView) view).setTextColor(Color.rgb(0xff, 0xc0, 0x40));
+						} else {
+							((TextView) view).setTextColor(Color.WHITE);
+						}
+						return true;
+					}
 		        }
 		        return false;
 		    }
