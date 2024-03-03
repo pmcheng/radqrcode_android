@@ -10,6 +10,7 @@ import java.util.Locale;
 
 import pmcheng.radqrcode.R;
 
+import android.Manifest;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.AlertDialog.Builder;
@@ -18,6 +19,7 @@ import android.app.ProgressDialog;
 import android.app.SearchManager;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Color;
 import android.os.AsyncTask;
@@ -40,6 +42,8 @@ import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.core.app.ActivityCompat;
+
 public class RadQRCodeActivity extends Activity implements OnItemClickListener {
 
 	private static final String TAG = "RadQRCodeActivity";
@@ -52,7 +56,7 @@ public class RadQRCodeActivity extends Activity implements OnItemClickListener {
 	private File mPath;
 	private String mChosenFile;
 	private static final int DIALOG_LOAD_FILE = 1000;
-
+	private static final int SCAN_RESULT_CODE = 0;
 	static final String[] FROM = { CaseData.C_MRN, CaseData.C_DATE,
 			CaseData.C_DESC };
 	static final int[] TO = { R.id.textView1, R.id.textView2, R.id.textView3 };
@@ -71,6 +75,13 @@ public class RadQRCodeActivity extends Activity implements OnItemClickListener {
 		caseApp= (RadQRCodeApp) super.getApplication();
 
 		Log.v(TAG, "onCreate");
+
+		if (ActivityCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.CAMERA)
+				== PackageManager.PERMISSION_DENIED) {
+			ActivityCompat.requestPermissions(this, new String[] {Manifest.permission.CAMERA}, 0);
+		}
+
+
 
 		Button buttonScan = (Button) findViewById(R.id.buttonScan);
 		buttonScan.setOnClickListener(new OnClickListener() {
@@ -115,25 +126,26 @@ public class RadQRCodeActivity extends Activity implements OnItemClickListener {
 	}
 
 	public void onActivityResult(int requestCode, int resultCode, Intent intent) {
-		if (requestCode == 0) {
-			if (resultCode == RESULT_OK) {
-				String contents = intent.getStringExtra("SCAN_RESULT");
-				// String format = intent.getStringExtra("SCAN_RESULT_FORMAT");
+		switch(requestCode) {
+			case SCAN_RESULT_CODE:
+				if (resultCode == RESULT_OK) {
+					String contents = intent.getStringExtra("SCAN_RESULT");
+					// String format = intent.getStringExtra("SCAN_RESULT_FORMAT");
 
-				Case radcase = new Case(contents);
+					Case radcase = new Case(contents);
 
-				long id = caseApp.getCaseData().insert(radcase);
-				if (id >= 0) {
-					Intent i = new Intent(this, EditActivity.class);
-					i.putExtra("id", id);
-					i.putExtra("scanned", true);
-					startActivity(i);
+					long id = caseApp.getCaseData().insert(radcase);
+					if (id >= 0) {
+						Intent i = new Intent(this, EditActivity.class);
+						i.putExtra("id", id);
+						i.putExtra("scanned", true);
+						startActivity(i);
+					}
+
+					// Handle successful scan
+				} else if (resultCode == RESULT_CANCELED) {
+					// Handle cancel
 				}
-
-				// Handle successful scan
-			} else if (resultCode == RESULT_CANCELED) {
-				// Handle cancel
-			}
 		}
 	}
 
