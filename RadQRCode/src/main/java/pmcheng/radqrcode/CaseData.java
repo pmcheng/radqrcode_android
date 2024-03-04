@@ -88,7 +88,7 @@ public class CaseData {
 	public ArrayList<String> getLocs() {
 		ArrayList<String> locList=new ArrayList<String>();
 		SQLiteDatabase db = this.dbHelper.getReadableDatabase();
-		String query=String.format("SELECT DISTINCT %s FROM %s ORDER BY %s",C_LOC, TABLE, C_LOC); 
+		String query=String.format("SELECT DISTINCT %s FROM %s WHERE %s<>'' ORDER BY %s",C_LOC, TABLE, C_LOC, C_LOC);
 		Cursor cursor=db.rawQuery(query,null);
 
 		cursor.moveToFirst();

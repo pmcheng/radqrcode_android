@@ -1,6 +1,5 @@
 package pmcheng.radqrcode;
 
-import java.io.File;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
@@ -8,8 +7,6 @@ import java.io.OutputStreamWriter;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
-
-import pmcheng.radqrcode.R;
 
 import android.Manifest;
 import android.app.Activity;
@@ -51,12 +48,8 @@ public class RadQRCodeActivity extends Activity implements OnItemClickListener {
 
 	private ListView listCases;
 	private Cursor cursor;
-	private SimpleCursorAdapter adapter;
 
-	private String[] mFileList;
-	private File mPath;
-
-	private static final int DIALOG_LOAD_FILE = 1000;
+	//private static final int DIALOG_LOAD_FILE = 1000;
 	private static final int SCAN_RESULT_CODE = 0;
 	private static final int PICK_CSV_FILE = 1;
 	private static final int CREATE_CSV_FILE = 2;
@@ -84,7 +77,7 @@ public class RadQRCodeActivity extends Activity implements OnItemClickListener {
 			ActivityCompat.requestPermissions(RadQRCodeActivity.this, new String[] {Manifest.permission.CAMERA}, 0);
 		}
 
-		Button buttonScan = (Button) findViewById(R.id.buttonScan);
+		Button buttonScan = findViewById(R.id.buttonScan);
 		buttonScan.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
 				Log.v(TAG, "ButtonScan");
@@ -95,14 +88,14 @@ public class RadQRCodeActivity extends Activity implements OnItemClickListener {
 			}
 		});
 
-		Button buttonSearch = (Button) findViewById(R.id.buttonSearch);
+		Button buttonSearch = findViewById(R.id.buttonSearch);
 		buttonSearch.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
 				onSearchRequested();
 			}
 		});
 
-		listCases = (ListView) findViewById(R.id.listViewCases);
+		listCases = findViewById(R.id.listViewCases);
 		registerForContextMenu(listCases);
 
 		handleIntent(getIntent());
@@ -185,7 +178,7 @@ public class RadQRCodeActivity extends Activity implements OnItemClickListener {
 		startManagingCursor(this.cursor);
 
 		// Setup the adapter
-		adapter = new SimpleCursorAdapter(this, R.layout.row, cursor, FROM, TO);
+		SimpleCursorAdapter adapter = new SimpleCursorAdapter(this, R.layout.row, cursor, FROM, TO);
 
 		// Add a ViewBinder to color code LACUSC and follow-up studies
 		final SimpleCursorAdapter.ViewBinder VIEW_BINDER = new SimpleCursorAdapter.ViewBinder() {
@@ -198,7 +191,7 @@ public class RadQRCodeActivity extends Activity implements OnItemClickListener {
 					int sel=cursor.getColumnIndex(CaseData.C_LOC);
 					if (sel>=0) {
 						String loc = cursor.getString(sel);
-						if (loc.equals("LACUSC")) {
+						if (loc.equals("LACUSC") || loc.equals("LAG")) {
 							((TextView) view).setTextColor(Color.GREEN);
 						} else {
 							((TextView) view).setTextColor(Color.WHITE);
@@ -210,7 +203,7 @@ public class RadQRCodeActivity extends Activity implements OnItemClickListener {
 		        	String desc=cursor.getString(columnIndex);
 		        	TextView tv=(TextView) view;
 		        	tv.setText(desc);
-					int sel=cursor.getColumnIndex(CaseData.C_LOC);
+					int sel=cursor.getColumnIndex(CaseData.C_FOLLOW_UP);
 					if (sel>=0) {
 						String fu = cursor.getString(sel);
 						if (fu.equals("1")) {
@@ -240,7 +233,7 @@ public class RadQRCodeActivity extends Activity implements OnItemClickListener {
 	}
 
 	protected Dialog onCreateDialog(int id) {
-		Dialog dialog = null;
+		Dialog dialog;
 		AlertDialog.Builder builder = new Builder(this);
 
 		switch (id) {
@@ -427,7 +420,7 @@ public class RadQRCodeActivity extends Activity implements OnItemClickListener {
 				String[] header = { "id", "loc", "MRN", "study", "date",
 						"desc", "follow_up" };
 				writer.writeNext(header);
-				while (cursor.isAfterLast() == false) {
+				while (!cursor.isAfterLast()) {
 					String[] entries = caseApp.getCaseData().getCase(cursor);
 					writer.writeNext(entries);
 					count++;
