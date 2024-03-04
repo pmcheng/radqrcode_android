@@ -4,9 +4,14 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.FilenameFilter;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
+import java.util.Objects;
 
 import pmcheng.radqrcode.R;
 
@@ -21,10 +26,13 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
+import android.database.DatabaseUtils;
 import android.graphics.Color;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
+import android.provider.DocumentsContract;
 import android.util.Log;
 import android.view.ContextMenu;
 import android.view.ContextMenu.ContextMenuInfo;
@@ -54,9 +62,13 @@ public class RadQRCodeActivity extends Activity implements OnItemClickListener {
 
 	private String[] mFileList;
 	private File mPath;
-	private String mChosenFile;
+	private File mChosenFile;
+
+	private Uri mChosenURI;
 	private static final int DIALOG_LOAD_FILE = 1000;
 	private static final int SCAN_RESULT_CODE = 0;
+	private static final int PICK_CSV_FILE = 1;
+	private static final int CREATE_CSV_FILE = 2;
 	static final String[] FROM = { CaseData.C_MRN, CaseData.C_DATE,
 			CaseData.C_DESC };
 	static final int[] TO = { R.id.textView1, R.id.textView2, R.id.textView3 };
@@ -65,7 +77,7 @@ public class RadQRCodeActivity extends Activity implements OnItemClickListener {
 	RadQRCodeApp caseApp;
 	
 	boolean searchResults=false;
-	
+
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -81,7 +93,10 @@ public class RadQRCodeActivity extends Activity implements OnItemClickListener {
 			ActivityCompat.requestPermissions(this, new String[] {Manifest.permission.CAMERA}, 0);
 		}
 
-
+		//if (ActivityCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE)
+		//		== PackageManager.PERMISSION_DENIED) {
+		//	ActivityCompat.requestPermissions(this, new String[] {Manifest.permission.WRITE_EXTERNAL_STORAGE}, 0);
+		//}
 
 		Button buttonScan = (Button) findViewById(R.id.buttonScan);
 		buttonScan.setOnClickListener(new OnClickListener() {
@@ -126,6 +141,7 @@ public class RadQRCodeActivity extends Activity implements OnItemClickListener {
 	}
 
 	public void onActivityResult(int requestCode, int resultCode, Intent intent) {
+		super.onActivityResult(requestCode, resultCode, intent);
 		switch(requestCode) {
 			case SCAN_RESULT_CODE:
 				if (resultCode == RESULT_OK) {
@@ -146,6 +162,55 @@ public class RadQRCodeActivity extends Activity implements OnItemClickListener {
 				} else if (resultCode == RESULT_CANCELED) {
 					// Handle cancel
 				}
+				break;
+			case PICK_CSV_FILE:
+				if (resultCode == Activity.RESULT_OK) {
+					Uri mChosenURI = intent.getData();
+					try {
+						InputStream inputStream=getContentResolver().openInputStream(mChosenURI);
+						CSVReader reader;reader = new CSVReader(new InputStreamReader(inputStream));
+						reader.readNext();
+						String[] nextLine;
+
+						while ((nextLine = reader.readNext()) != null) {
+							if (nextLine.length < Case.LENGTH)
+								continue;
+							String[] subset = new String[Case.LENGTH];
+							final int OFFSET = 1; // skip ID field
+							for (int i = 0; i < subset.length; i++) {
+								subset[i] = nextLine[i + OFFSET];
+							}
+							Case radcase = new Case(subset);
+							caseApp.getCaseData().insert(radcase);
+						}
+						setupList();
+					} catch (Exception e) {
+						Log.d(TAG, "Return from pick CSV file", e);
+					}
+					//new ImportTask(RadQRCodeActivity.this).execute();
+				}
+				break;
+			case CREATE_CSV_FILE:
+				if (resultCode == Activity.RESULT_OK) {
+					Uri mChosenURI = intent.getData();
+					try {
+						OutputStream outputStream = getContentResolver().openOutputStream(mChosenURI);
+						CSVWriter writer = new CSVWriter(new OutputStreamWriter(outputStream));
+						cursor.moveToFirst();
+						String[] header = {"id", "loc", "MRN", "study", "date",
+								"desc", "follow_up"};
+						writer.writeNext(header);
+						while (cursor.isAfterLast() == false) {
+							String[] entries = caseApp.getCaseData().getCase(cursor);
+							writer.writeNext(entries);
+							cursor.moveToNext();
+						}
+						writer.close();
+					} catch (Exception e) {
+						Log.d(TAG, "Return from create CSV file", e);
+					}
+				}
+				break;
 		}
 	}
 
@@ -261,7 +326,7 @@ public class RadQRCodeActivity extends Activity implements OnItemClickListener {
 			}
 			builder.setItems(mFileList, new DialogInterface.OnClickListener() {
 				public void onClick(DialogInterface dialog, int which) {
-					mChosenFile = new File(mPath.getAbsolutePath(),mFileList[which]).toString();
+					mChosenFile = new File(mPath.getAbsolutePath(),mFileList[which]);
 					new ImportTask(RadQRCodeActivity.this).execute();
 				}
 			});
@@ -277,6 +342,24 @@ public class RadQRCodeActivity extends Activity implements OnItemClickListener {
 		return true;
 	}
 
+	private void pickCSVFile() {
+		Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
+		intent.addCategory(Intent.CATEGORY_OPENABLE);
+		intent.setType("text/comma-separated-values");
+		startActivityForResult(intent, PICK_CSV_FILE);
+	}
+
+	private void createCSVFile() {
+		Intent intent = new Intent(Intent.ACTION_CREATE_DOCUMENT);
+		intent.addCategory(Intent.CATEGORY_OPENABLE);
+		intent.setType("text/comma-separated-values");
+		SimpleDateFormat formatter = new SimpleDateFormat("yyyy_MM_dd_HHmm", Locale.US);
+		Date now = new Date();
+		String fileName = "cases_" + formatter.format(now) + ".csv";
+		intent.putExtra(Intent.EXTRA_TITLE, fileName);
+		startActivityForResult(intent, CREATE_CSV_FILE);
+	}
+
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
 		case R.id.about:
@@ -289,18 +372,20 @@ public class RadQRCodeActivity extends Activity implements OnItemClickListener {
 			startActivity(i);
 			break;
 		case R.id.import_cases:
-			loadFileList();
-			if (mFileList.length > 0) {
-				showDialog(DIALOG_LOAD_FILE);
-			} else {
-				Toast.makeText(RadQRCodeActivity.this,
-						"No .csv files found to import.", Toast.LENGTH_SHORT)
-						.show();
-			}
+			pickCSVFile();
+//			loadFileList();
+//			if (mFileList.length > 0) {
+//				showDialog(DIALOG_LOAD_FILE);
+//			} else {
+//				Toast.makeText(RadQRCodeActivity.this,
+//						"No .csv files found to import.", Toast.LENGTH_SHORT)
+//						.show();
+//			}
 
 			break;
 		case R.id.export_cases:
-			new ExportTask(this).execute();
+			createCSVFile();
+			//new ExportTask(this).execute();
 			break;
 		case R.id.delete_db:
 			AlertDialog.Builder builder = new AlertDialog.Builder(
@@ -373,7 +458,13 @@ public class RadQRCodeActivity extends Activity implements OnItemClickListener {
 			CSVReader reader;
 			count = 0;
 			try {
-				reader = new CSVReader(new FileReader(mChosenFile));
+				//File file=new File(mChosenURI.getPath());
+				//Cursor c = getContentResolver().query(mChosenURI,null,null,null,null);
+				//DatabaseUtils.dumpCursor(c);
+				//Log.v("RadQRCode", file.getAbsolutePath());
+
+				InputStream inputStream=getContentResolver().openInputStream(mChosenURI);
+				reader = new CSVReader(new InputStreamReader(inputStream));
 				reader.readNext();
 				String[] nextLine;
 
