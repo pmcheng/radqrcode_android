@@ -67,8 +67,7 @@ public class EditActivity extends Activity {
 			mYear = cal.get(Calendar.YEAR);
 			mMonth = cal.get(Calendar.MONTH);
 			mDay = cal.get(Calendar.DAY_OF_MONTH);
-			b_date.setText(mYear + "-" + (mMonth + 1) + "-" + mDay);
-
+			updateDisplay();
 			newCase = true;
 
 		} else {
