@@ -98,35 +98,35 @@ public final class ShareActivity extends Activity {
 
   private final Button.OnClickListener clipboardListener = new Button.OnClickListener() {
     public void onClick(View v) {
-      ClipboardManager clipboard = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
-      // Should always be true, because we grey out the clipboard button in onResume() if it's empty
-      if (clipboard.hasText()) {
-        launchSearch(clipboard.getText().toString());
-      }
+//      ClipboardManager clipboard = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
+//      // Should always be true, because we grey out the clipboard button in onResume() if it's empty
+//      if (clipboard.hasText()) {
+//        launchSearch(clipboard.getText().toString());
+//      }
     }
   };
 
   private final View.OnKeyListener textListener = new View.OnKeyListener() {
     public boolean onKey(View view, int keyCode, KeyEvent event) {
-      if (keyCode == KeyEvent.KEYCODE_ENTER && event.getAction() == KeyEvent.ACTION_DOWN) {
-        String text = ((TextView) view).getText().toString();
-        if (text != null && text.length() > 0) {
-          launchSearch(text);
-        }
-        return true;
-      }
+//      if (keyCode == KeyEvent.KEYCODE_ENTER && event.getAction() == KeyEvent.ACTION_DOWN) {
+//        String text = ((TextView) view).getText().toString();
+//        if (text != null && text.length() > 0) {
+//          launchSearch(text);
+//        }
+//        return true;
+//      }
       return false;
     }
   };
 
-  private void launchSearch(String text) {
-    Intent intent = new Intent(Intents.Encode.ACTION);
-    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET);
-    intent.putExtra(Intents.Encode.TYPE, Contents.Type.TEXT);
-    intent.putExtra(Intents.Encode.DATA, text);
-    intent.putExtra(Intents.Encode.FORMAT, BarcodeFormat.QR_CODE.toString());
-    startActivity(intent);
-  }
+//  private void launchSearch(String text) {
+//    Intent intent = new Intent(Intents.Encode.ACTION);
+//    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET);
+//    intent.putExtra(Intents.Encode.TYPE, Contents.Type.TEXT);
+//    intent.putExtra(Intents.Encode.DATA, text);
+//    intent.putExtra(Intents.Encode.FORMAT, BarcodeFormat.QR_CODE.toString());
+//    startActivity(intent);
+//  }
 
   @Override
   public void onCreate(Bundle icicle) {
@@ -165,7 +165,7 @@ public final class ShareActivity extends Activity {
           break;
         case PICK_CONTACT:
           // Data field is content://contacts/people/984
-          showContactAsBarcode(intent.getData());
+//          showContactAsBarcode(intent.getData());
           break;
       }
     }
@@ -184,91 +184,91 @@ public final class ShareActivity extends Activity {
     startActivity(intent);
   }
 
-  /**
-   * Takes a contact Uri and does the necessary database lookups to retrieve that person's info,
-   * then sends an Encode intent to render it as a QR Code.
-   *
-   * @param contactUri A Uri of the form content://contacts/people/17
-   */
-  private void showContactAsBarcode(Uri contactUri) {
-    Log.i(TAG, "Showing contact URI as barcode: " + contactUri);
-    if (contactUri == null) {
-      return; // Show error?
-    }
-    ContentResolver resolver = getContentResolver();
-    Cursor contactCursor;
-    try {
-      // We're seeing about six reports a week of this exception although I don't understand why.
-      contactCursor = resolver.query(contactUri, null, null, null, null);
-    } catch (IllegalArgumentException e) {
-      return;
-    }
-    Bundle bundle = new Bundle();
-    if (contactCursor != null && contactCursor.moveToFirst()) {
-      int nameColumn = contactCursor.getColumnIndex(Contacts.PeopleColumns.NAME);
-      if (nameColumn >= 0) {
-        String name = contactCursor.getString(nameColumn);
-
-        // Don't require a name to be present, this contact might be just a phone number.
-        if (name != null && name.length() > 0) {
-          bundle.putString(Contacts.Intents.Insert.NAME, massageContactData(name));
-        }
-      } else {
-        Log.w(TAG, "Unable to find column? " + Contacts.PeopleColumns.NAME);
-      }
-      contactCursor.close();
-
-      Uri phonesUri = Uri.withAppendedPath(contactUri, Contacts.People.Phones.CONTENT_DIRECTORY);
-      Cursor phonesCursor = resolver.query(phonesUri, PHONES_PROJECTION, null, null, null);
-      if (phonesCursor != null) {
-        int foundPhone = 0;
-        while (phonesCursor.moveToNext()) {
-          String number = phonesCursor.getString(PHONES_NUMBER_COLUMN);
-          if (foundPhone < Contents.PHONE_KEYS.length) {
-            bundle.putString(Contents.PHONE_KEYS[foundPhone], massageContactData(number));
-            foundPhone++;
-          }
-        }
-        phonesCursor.close();
-      }
-
-      Uri methodsUri = Uri.withAppendedPath(contactUri,
-          Contacts.People.ContactMethods.CONTENT_DIRECTORY);
-      Cursor methodsCursor = resolver.query(methodsUri, METHODS_PROJECTION, null, null, null);
-      if (methodsCursor != null) {
-        int foundEmail = 0;
-        boolean foundPostal = false;
-        while (methodsCursor.moveToNext()) {
-          int kind = methodsCursor.getInt(METHODS_KIND_COLUMN);
-          String data = methodsCursor.getString(METHODS_DATA_COLUMN);
-          switch (kind) {
-            case Contacts.KIND_EMAIL:
-              if (foundEmail < Contents.EMAIL_KEYS.length) {
-                bundle.putString(Contents.EMAIL_KEYS[foundEmail], massageContactData(data));
-                foundEmail++;
-              }
-              break;
-            case Contacts.KIND_POSTAL:
-              if (!foundPostal) {
-                bundle.putString(Contacts.Intents.Insert.POSTAL, massageContactData(data));
-                foundPostal = true;
-              }
-              break;
-          }
-        }
-        methodsCursor.close();
-      }
-
-      Intent intent = new Intent(Intents.Encode.ACTION);
-      intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET);
-      intent.putExtra(Intents.Encode.TYPE, Contents.Type.CONTACT);
-      intent.putExtra(Intents.Encode.DATA, bundle);
-      intent.putExtra(Intents.Encode.FORMAT, BarcodeFormat.QR_CODE.toString());
-
-      Log.i(TAG, "Sending bundle for encoding: " + bundle);
-      startActivity(intent);
-    }
-  }
+//  /**
+//   * Takes a contact Uri and does the necessary database lookups to retrieve that person's info,
+//   * then sends an Encode intent to render it as a QR Code.
+//   *
+//   * @param contactUri A Uri of the form content://contacts/people/17
+//   */
+//  private void showContactAsBarcode(Uri contactUri) {
+//    Log.i(TAG, "Showing contact URI as barcode: " + contactUri);
+//    if (contactUri == null) {
+//      return; // Show error?
+//    }
+//    ContentResolver resolver = getContentResolver();
+//    Cursor contactCursor;
+//    try {
+//      // We're seeing about six reports a week of this exception although I don't understand why.
+//      contactCursor = resolver.query(contactUri, null, null, null, null);
+//    } catch (IllegalArgumentException e) {
+//      return;
+//    }
+//    Bundle bundle = new Bundle();
+//    if (contactCursor != null && contactCursor.moveToFirst()) {
+//      int nameColumn = contactCursor.getColumnIndex(Contacts.PeopleColumns.NAME);
+//      if (nameColumn >= 0) {
+//        String name = contactCursor.getString(nameColumn);
+//
+//        // Don't require a name to be present, this contact might be just a phone number.
+//        if (name != null && name.length() > 0) {
+//          bundle.putString(Contacts.Intents.Insert.NAME, massageContactData(name));
+//        }
+//      } else {
+//        Log.w(TAG, "Unable to find column? " + Contacts.PeopleColumns.NAME);
+//      }
+//      contactCursor.close();
+//
+//      Uri phonesUri = Uri.withAppendedPath(contactUri, Contacts.People.Phones.CONTENT_DIRECTORY);
+//      Cursor phonesCursor = resolver.query(phonesUri, PHONES_PROJECTION, null, null, null);
+//      if (phonesCursor != null) {
+//        int foundPhone = 0;
+//        while (phonesCursor.moveToNext()) {
+//          String number = phonesCursor.getString(PHONES_NUMBER_COLUMN);
+//          if (foundPhone < Contents.PHONE_KEYS.length) {
+//            bundle.putString(Contents.PHONE_KEYS[foundPhone], massageContactData(number));
+//            foundPhone++;
+//          }
+//        }
+//        phonesCursor.close();
+//      }
+//
+//      Uri methodsUri = Uri.withAppendedPath(contactUri,
+//          Contacts.People.ContactMethods.CONTENT_DIRECTORY);
+//      Cursor methodsCursor = resolver.query(methodsUri, METHODS_PROJECTION, null, null, null);
+//      if (methodsCursor != null) {
+//        int foundEmail = 0;
+//        boolean foundPostal = false;
+//        while (methodsCursor.moveToNext()) {
+//          int kind = methodsCursor.getInt(METHODS_KIND_COLUMN);
+//          String data = methodsCursor.getString(METHODS_DATA_COLUMN);
+//          switch (kind) {
+//            case Contacts.KIND_EMAIL:
+//              if (foundEmail < Contents.EMAIL_KEYS.length) {
+//                bundle.putString(Contents.EMAIL_KEYS[foundEmail], massageContactData(data));
+//                foundEmail++;
+//              }
+//              break;
+//            case Contacts.KIND_POSTAL:
+//              if (!foundPostal) {
+//                bundle.putString(Contacts.Intents.Insert.POSTAL, massageContactData(data));
+//                foundPostal = true;
+//              }
+//              break;
+//          }
+//        }
+//        methodsCursor.close();
+//      }
+//
+//      Intent intent = new Intent(Intents.Encode.ACTION);
+//      intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET);
+//      intent.putExtra(Intents.Encode.TYPE, Contents.Type.CONTACT);
+//      intent.putExtra(Intents.Encode.DATA, bundle);
+//      intent.putExtra(Intents.Encode.FORMAT, BarcodeFormat.QR_CODE.toString());
+//
+//      Log.i(TAG, "Sending bundle for encoding: " + bundle);
+//      startActivity(intent);
+//    }
+//  }
 
   private static String massageContactData(String data) {
     // For now -- make sure we don't put newlines in shared contact data. It messes up

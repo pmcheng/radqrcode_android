@@ -403,7 +403,7 @@ public class RadQRCodeActivity extends Activity implements OnItemClickListener {
 			}
 			if (success)
 				Toast.makeText(RadQRCodeActivity.this,
-						"Exported " + count + " entries", Toast.LENGTH_LONG)
+						"Exported " + count + " entries.", Toast.LENGTH_LONG)
 						.show();
 			else 
 				Toast.makeText(RadQRCodeActivity.this,
