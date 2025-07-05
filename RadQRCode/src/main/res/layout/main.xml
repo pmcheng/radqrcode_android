@@ -2,13 +2,13 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:orientation="vertical" >
+    android:orientation="vertical"
+    android:fitsSystemWindows="true" >
 
     <LinearLayout
+        style="?android:attr/buttonBarStyle"
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content" >
-
-
+        android:layout_height="wrap_content">
 
 
         <Button
@@ -16,10 +16,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:drawableLeft="@drawable/ic_menu_camera"
+            android:drawableStart="@drawable/ic_menu_camera"
             android:text="@string/scan" />
-
-
 
 
         <Button
@@ -27,7 +25,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:drawableLeft="@drawable/ic_menu_search"
+            android:drawableStart="@drawable/ic_menu_search"
             android:text="@string/search" />
 
     </LinearLayout>
